@@ -30,6 +30,15 @@ class ChannelInfoLocalDataSource @Inject constructor(
             .commit()
     }
 
+    suspend fun addChannel(channelInfo: ChannelInfo): List<ChannelInfo> = withContext(Dispatchers.IO) {
+        getChannels()
+            .toMutableList()
+            .also {
+                it.add(channelInfo)
+                saveChannels(it)
+            }
+    }
+
     private companion object {
 
         const val KEY_CHANNELS = "channels_key"

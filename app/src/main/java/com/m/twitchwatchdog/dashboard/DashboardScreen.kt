@@ -1,15 +1,23 @@
 package com.m.twitchwatchdog.dashboard
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.m.twitchwatchdog.dashboard.addChannel.AddChannelCard
 import com.m.twitchwatchdog.dashboard.channelCard.ChannelCard
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.model.DashboardScreenState
@@ -19,20 +27,39 @@ import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 fun DashboardScreen(
     state: DashboardScreenState,
     onNotifyWhenLiveClicked: (ChannelInfo) -> Unit,
+    onSaveChannelClicked: (String, Boolean) -> Unit,
 ) {
-    LazyColumn(
-        content = {
-            items(state.channels.size) {
-                ChannelCard(
-                    channelInfo = state.channels[it],
-                    onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
-                    modifier = Modifier.padding(vertical = 8.dp),
-                )
-            }
-        },
-        contentPadding = PaddingValues(16.dp),
-        modifier = Modifier.statusBarsPadding().systemBarsPadding()
-    )
+    var isAddChannelExpanded by remember {
+        mutableStateOf(false)
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            content = {
+                items(state.channels.size) {
+                    ChannelCard(
+                        channelInfo = state.channels[it],
+                        onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
+                        modifier = Modifier.padding(vertical = 8.dp),
+                    )
+                }
+            },
+            contentPadding = PaddingValues(16.dp),
+            modifier = Modifier
+                .statusBarsPadding()
+                .systemBarsPadding()
+        )
+
+        AddChannelCard(
+            expanded = isAddChannelExpanded,
+            onAddChannelClicked = { isAddChannelExpanded = true },
+            onSaveChannelClicked = onSaveChannelClicked,
+            onCloseClicked = { isAddChannelExpanded = false},
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(8.dp)
+        )
+    }
 }
 
 @Composable
@@ -61,7 +88,9 @@ private fun DashboardScreenPreview() {
         Surface {
             DashboardScreen(
                 state = DashboardScreenState(channels),
-                onNotifyWhenLiveClicked = {})
+                onNotifyWhenLiveClicked = {},
+                onSaveChannelClicked = {_, _ -> }
+            )
         }
     }
 }
