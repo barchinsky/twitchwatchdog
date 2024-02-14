@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TwitchWatchdog</string>
+    <string name="default_notification_channel_id">twitch_watchdog_alert</string>
+    <string name="channels_online">Your favorite channels are Live! (%s)</string>
+</resources>
