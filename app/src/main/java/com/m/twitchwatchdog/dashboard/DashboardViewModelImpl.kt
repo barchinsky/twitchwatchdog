@@ -40,8 +40,9 @@ internal class DashboardViewModelImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun onAddChannelClicked() {
-        TODO("Not yet implemented")
+    override fun onSaveChannelClicked(channelName: String, notifyWhenLive: Boolean) {
+        println("New channel: $channelName notifyWhenLive: $notifyWhenLive")
+
     }
 
     override fun onNotifyWhenLiveClicked(channelInfo: ChannelInfo) {
