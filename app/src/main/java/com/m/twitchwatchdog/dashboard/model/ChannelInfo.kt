@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ChannelInfo(
-    val id: Int,
+    val id: Long,
     val name: String,
     val status: Status,
     val avatarUrl: String?,
@@ -16,5 +16,19 @@ data class ChannelInfo(
     enum class Status {
         LIVE,
         OFFLINE
+    }
+
+    companion object {
+
+        fun getDefault(id: Long, name: String, notifyWhenLive: Boolean): ChannelInfo =
+            ChannelInfo(
+                id = id,
+                name = name,
+                status = Status.OFFLINE,
+                avatarUrl = null,
+                loading = false,
+                expanded = false,
+                notifyWhenLive = notifyWhenLive
+            )
     }
 }

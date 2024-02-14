@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.model.DashboardScreenState
+import com.m.twitchwatchdog.dashboard.useCase.AddChannelUseCase
 import com.m.twitchwatchdog.dashboard.useCase.DisableChannelAlertUseCase
 import com.m.twitchwatchdog.dashboard.useCase.EnableChannelAlertUseCase
 import com.m.twitchwatchdog.dashboard.useCase.StoreChannelsInfoUseCase
@@ -12,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +22,8 @@ internal class DashboardViewModelImpl @Inject constructor(
     private val storeChannelsInfoUseCase: StoreChannelsInfoUseCase,
     private val enableChannelAlertUseCase: EnableChannelAlertUseCase,
     private val disableChannelAlertUseCase: DisableChannelAlertUseCase,
-) : DashboardViewModel, ViewModel() {
+    private val addChannelUseCase: AddChannelUseCase,
+    ) : DashboardViewModel, ViewModel() {
 
     override val state = MutableStateFlow(DashboardScreenState())
 
@@ -42,6 +45,16 @@ internal class DashboardViewModelImpl @Inject constructor(
 
     override fun onSaveChannelClicked(channelName: String, notifyWhenLive: Boolean) {
         println("New channel: $channelName notifyWhenLive: $notifyWhenLive")
+        viewModelScope.launch {
+            val channelInfo = ChannelInfo.getDefault(Calendar.getInstance().timeInMillis, channelName, notifyWhenLive)
+            runCatching {
+                val channels = addChannelUseCase.execute(channelInfo)
+
+                state.update { it.copy(channels = channels) }
+            }.onFailure {
+                println("Failed to add channel: $it")
+            }
+        }
 
     }
 
@@ -54,7 +67,6 @@ internal class DashboardViewModelImpl @Inject constructor(
 
             state.update { it.copy(channels = channels) }
 
-            // TODO Start/stop watchdog for the channel
             storeChannelsInfoUseCase.execute(channels)
 
             if (channels.any { it.notifyWhenLive }) {

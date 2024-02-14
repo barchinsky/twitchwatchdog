@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -80,6 +84,16 @@ fun AddChannelCard(
                 Column(
                     modifier = Modifier.padding(16.dp),
                 ) {
+                    Icon(Icons.Filled.Close,
+                        contentDescription = "Close",
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .align(Alignment.End)
+                            .clickable {
+                                onCloseClicked()
+                                channelName = ""
+                            }
+                    )
                     OutlinedTextField(
                         value = channelName,
                         onValueChange = { channelName = it },
