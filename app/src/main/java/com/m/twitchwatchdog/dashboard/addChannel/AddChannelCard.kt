@@ -102,12 +102,6 @@ fun AddChannelCard(
                         label = { Text("Twitch channel") },
                         modifier = Modifier
                             .fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color.Black,
-                            focusedTextColor = Color.Black,
-                            focusedLabelColor = Color.Black,
-                            cursorColor = Color.Black,
-                        )
                     )
                     Spacer(modifier = Modifier.heightIn(8.dp))
                     SwitchRow(

@@ -13,7 +13,7 @@ private val DarkColorScheme = darkColorScheme(
     inversePrimary = Color.White,
     secondary = PurpleGrey80,
     tertiary = Pink80,
-    secondaryContainer = Color.Gray
+    secondaryContainer = LightGrey
 )
 
 private val LightColorScheme = lightColorScheme(
