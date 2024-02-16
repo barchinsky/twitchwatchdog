@@ -1,9 +1,11 @@
 package com.m.twitchwatchdog.dashboard
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -44,24 +46,34 @@ fun DashboardScreen(
             .statusBarsPadding()
             .systemBarsPadding()
     ) {
-        if (state.loading) {
-            LottieAnimation(
-                composition = loadingComposition,
-                modifier = Modifier.align(Alignment.Center)
-            )
-        } else {
-            LazyColumn(
-                content = {
-                    items(state.channels.size) {
-                        ChannelCard(
-                            channelInfo = state.channels[it],
-                            onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
-                            modifier = Modifier.padding(vertical = 8.dp),
-                        )
-                    }
-                },
-                contentPadding = PaddingValues(16.dp),
-            )
+        Crossfade(
+            targetState = state.loading,
+            label = "Loading content",
+            modifier = Modifier.align(Alignment.Center)
+        ) { loading ->
+            if (loading) {
+                LottieAnimation(
+                    composition = loadingComposition,
+                    isPlaying = true,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(200.dp)
+                )
+            } else {
+                LazyColumn(
+                    content = {
+                        items(state.channels.size) {
+                            ChannelCard(
+                                channelInfo = state.channels[it],
+                                onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
+                                modifier = Modifier.padding(vertical = 8.dp),
+                            )
+                        }
+                    },
+                    contentPadding = PaddingValues(16.dp),
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
 
         AddChannelCard(

@@ -36,9 +36,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.m.twitchwatchdog.infrastructure.ui.switchRow.SwitchRow
 import com.m.twitchwatchdog.ui.theme.Green80
+import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
 @Composable
 fun AddChannelCard(
@@ -141,17 +143,19 @@ private fun animateHorizontalAlignmentAsState(
 }
 
 @Composable
-@Preview(showBackground = true)
+@PreviewLightDark
 fun AddChannelCardPreview() {
-    Surface {
-        Box(modifier = Modifier.fillMaxSize()) {
-            AddChannelCard(
-                expanded = false,
-                onAddChannelClicked = {},
-                onSaveChannelClicked = { _, _ -> },
-                onCloseClicked = {},
-                modifier = Modifier.align(Alignment.BottomEnd)
-            )
+    TwitchWatchdogTheme {
+        Surface {
+            Box(modifier = Modifier.fillMaxSize()) {
+                AddChannelCard(
+                    expanded = true,
+                    onAddChannelClicked = {},
+                    onSaveChannelClicked = { _, _ -> },
+                    onCloseClicked = {},
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                )
+            }
         }
     }
 }
