@@ -30,11 +30,13 @@ internal class DashboardViewModelImpl @Inject constructor(
     init {
         viewModelScope.launch {
             runCatching {
+                state.update { it.copy(loading = true) }
                 val newChannels = fetchChannelInfoUseCase.execute()
 
-                state.update { it.copy(channels = newChannels) }
-            }.onFailure {
-                println("Failed to fetch channel info: $it")
+                state.update { it.copy(channels = newChannels, loading = false) }
+            }.onFailure { t ->
+                println("Failed to fetch channel info: $t")
+                state.update { it.copy(loading = false) }
             }
         }
     }
