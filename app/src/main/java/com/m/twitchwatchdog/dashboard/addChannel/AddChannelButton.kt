@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -53,7 +54,8 @@ fun AddChannelButton(
     ) {
         Row(
             modifier = Modifier
-                .background(Green40.takeIf { enabled || !expanded } ?: Green80, RoundedCornerShape(6.dp))
+                .background(MaterialTheme.colorScheme.primary.takeIf { enabled || !expanded } ?: MaterialTheme.colorScheme.inversePrimary,
+                    RoundedCornerShape(6.dp))
                 .padding(12.dp)
                 .animateContentSize(),
             verticalAlignment = Alignment.CenterVertically,

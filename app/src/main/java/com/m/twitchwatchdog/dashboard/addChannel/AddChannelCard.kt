@@ -65,7 +65,7 @@ fun AddChannelCard(
 
     if (expanded) {
         addButtonHorizontalBias = 0f
-        backgroundColor = Green80
+        backgroundColor = MaterialTheme.colorScheme.secondaryContainer
     } else {
         addButtonHorizontalBias = 1f
         backgroundColor = defaultBackgroundColor

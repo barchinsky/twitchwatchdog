@@ -27,7 +27,7 @@ internal class EnableChannelAlertUseCase @Inject constructor(
                 JOB_ID_ENABLE_ALERT.hashCode(),
                 ComponentName(context, CheckChannelStatusJobService::class.java)
             )
-            .setPeriodic(TimeUnit.HOURS.toMillis(1))
+            .setPeriodic(TimeUnit.MINUTES.toMillis(30))
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
             .setRequiresCharging(false)
             .setRequiresBatteryNotLow(false)
