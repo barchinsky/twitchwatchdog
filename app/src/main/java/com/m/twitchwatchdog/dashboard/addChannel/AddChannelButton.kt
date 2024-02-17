@@ -16,15 +16,15 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.m.twitchwatchdog.ui.theme.Green40
-import com.m.twitchwatchdog.ui.theme.Green80
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
 @Composable
@@ -53,7 +53,9 @@ fun AddChannelButton(
     ) {
         Row(
             modifier = Modifier
-                .background(Green40.takeIf { enabled || !expanded } ?: Green80, RoundedCornerShape(6.dp))
+                .background(MaterialTheme.colorScheme.primary.takeIf { enabled || !expanded }
+                    ?: MaterialTheme.colorScheme.inversePrimary,
+                    RoundedCornerShape(6.dp))
                 .padding(12.dp)
                 .animateContentSize(),
             verticalAlignment = Alignment.CenterVertically,
@@ -61,20 +63,22 @@ fun AddChannelButton(
         ) {
             Crossfade(targetState = expanded, label = "Icon") {
                 if (it) {
-                    Icon(Icons.Filled.Done, "Save channel")
+                    Icon(Icons.Filled.Done, "Save channel", tint =  MaterialTheme.colorScheme.onPrimary)
                 } else {
-                    Icon(Icons.Filled.Add, "Add channel")
+                    Icon(Icons.Filled.Add, "Add channel", tint =  MaterialTheme.colorScheme.onPrimary)
                 }
             }
             Spacer(modifier = Modifier.width(4.dp))
-            Text(text = "Save".takeIf { expanded } ?: "Add channel", fontWeight = FontWeight.Medium)
+            Text(text = "Save".takeIf { expanded } ?: "Add channel",
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onPrimary)
         }
     }
 
 }
 
 @Composable
-@Preview(showBackground = true)
+@PreviewLightDark
 private fun AddChannelButtonPreview() {
     TwitchWatchdogTheme {
         AddChannelButton(

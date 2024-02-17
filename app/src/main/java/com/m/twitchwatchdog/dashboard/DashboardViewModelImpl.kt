@@ -23,18 +23,20 @@ internal class DashboardViewModelImpl @Inject constructor(
     private val enableChannelAlertUseCase: EnableChannelAlertUseCase,
     private val disableChannelAlertUseCase: DisableChannelAlertUseCase,
     private val addChannelUseCase: AddChannelUseCase,
-    ) : DashboardViewModel, ViewModel() {
+) : DashboardViewModel, ViewModel() {
 
     override val state = MutableStateFlow(DashboardScreenState())
 
     init {
         viewModelScope.launch {
             runCatching {
+                state.update { it.copy(loading = true) }
                 val newChannels = fetchChannelInfoUseCase.execute()
 
-                state.update { it.copy(channels = newChannels) }
-            }.onFailure {
-                println("Failed to fetch channel info: $it")
+                state.update { it.copy(channels = newChannels, loading = false) }
+            }.onFailure { t ->
+                println("Failed to fetch channel info: $t")
+                state.update { it.copy(loading = false) }
             }
         }
     }
@@ -46,11 +48,19 @@ internal class DashboardViewModelImpl @Inject constructor(
     override fun onSaveChannelClicked(channelName: String, notifyWhenLive: Boolean) {
         println("New channel: $channelName notifyWhenLive: $notifyWhenLive")
         viewModelScope.launch {
-            val channelInfo = ChannelInfo.getDefault(Calendar.getInstance().timeInMillis, channelName, notifyWhenLive)
+            val channelInfo = ChannelInfo.getDefault(
+                Calendar.getInstance().timeInMillis,
+                channelName,
+                notifyWhenLive
+            )
             runCatching {
                 val channels = addChannelUseCase.execute(channelInfo)
 
                 state.update { it.copy(channels = channels) }
+
+                if (channelInfo.notifyWhenLive) {
+                    enableChannelAlertUseCase.execute()
+                }
             }.onFailure {
                 println("Failed to add channel: $it")
             }

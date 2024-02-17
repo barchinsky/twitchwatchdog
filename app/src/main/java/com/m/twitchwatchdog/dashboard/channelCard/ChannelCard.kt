@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -19,8 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -69,16 +72,17 @@ fun ChannelCard(
                 Text(channelInfo.name, fontSize = 20.sp, fontWeight = FontWeight.Medium)
                 Spacer(modifier = Modifier.width(16.dp))
             }
-            Switch(checked = channelInfo.notifyWhenLive,
+            Switch(
+                checked = channelInfo.notifyWhenLive,
                 onCheckedChange = { onNotifyWhenLiveClicked(channelInfo) },
-                colors = SwitchDefaults.colors(checkedTrackColor = Green40)
+                colors = SwitchDefaults.colors(checkedTrackColor = MaterialTheme.colorScheme.primary)
             )
         }
     }
 }
 
 @Composable
-@Preview(showBackground = true)
+@PreviewLightDark
 fun ChannelCardPreview() {
     TwitchWatchdogTheme {
         ChannelCard(
@@ -89,7 +93,7 @@ fun ChannelCardPreview() {
                 "",
                 loading = false,
                 expanded = false,
-                notifyWhenLive = false
+                notifyWhenLive = true
             ),
             onNotifyWhenLiveClicked = {}
         )

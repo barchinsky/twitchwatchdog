@@ -1,9 +1,11 @@
 package com.m.twitchwatchdog.dashboard
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.dashboard.addChannel.AddChannelCard
 import com.m.twitchwatchdog.dashboard.channelCard.ChannelCard
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
@@ -29,32 +35,52 @@ fun DashboardScreen(
     onNotifyWhenLiveClicked: (ChannelInfo) -> Unit,
     onSaveChannelClicked: (String, Boolean) -> Unit,
 ) {
+    val loadingComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loading))
     var isAddChannelExpanded by remember {
         mutableStateOf(false)
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
-            content = {
-                items(state.channels.size) {
-                    ChannelCard(
-                        channelInfo = state.channels[it],
-                        onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
-                        modifier = Modifier.padding(vertical = 8.dp),
-                    )
-                }
-            },
-            contentPadding = PaddingValues(16.dp),
-            modifier = Modifier
-                .statusBarsPadding()
-                .systemBarsPadding()
-        )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .systemBarsPadding()
+    ) {
+        Crossfade(
+            targetState = state.loading,
+            label = "Loading content",
+            modifier = Modifier.align(Alignment.Center)
+        ) { loading ->
+            if (loading) {
+                LottieAnimation(
+                    composition = loadingComposition,
+                    isPlaying = true,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(200.dp)
+                )
+            } else {
+                LazyColumn(
+                    content = {
+                        items(state.channels.size) {
+                            ChannelCard(
+                                channelInfo = state.channels[it],
+                                onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
+                                modifier = Modifier.padding(vertical = 8.dp),
+                            )
+                        }
+                    },
+                    contentPadding = PaddingValues(16.dp),
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+        }
 
         AddChannelCard(
             expanded = isAddChannelExpanded,
             onAddChannelClicked = { isAddChannelExpanded = true },
             onSaveChannelClicked = onSaveChannelClicked,
-            onCloseClicked = { isAddChannelExpanded = false},
+            onCloseClicked = { isAddChannelExpanded = false },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(8.dp)
@@ -63,7 +89,7 @@ fun DashboardScreen(
 }
 
 @Composable
-@Preview
+@Preview(showSystemUi = true)
 private fun DashboardScreenPreview() {
     val channels = listOf(
         ChannelInfo(
@@ -87,9 +113,9 @@ private fun DashboardScreenPreview() {
     TwitchWatchdogTheme {
         Surface {
             DashboardScreen(
-                state = DashboardScreenState(channels),
+                state = DashboardScreenState(channels, loading = true),
                 onNotifyWhenLiveClicked = {},
-                onSaveChannelClicked = {_, _ -> }
+                onSaveChannelClicked = { _, _ -> }
             )
         }
     }

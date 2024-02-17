@@ -36,6 +36,7 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun onStartJob(params: JobParameters?): Boolean {
+        println("Should check status: ${shouldCheckChannelStatusUseCase.execute()}")
         if (!shouldCheckChannelStatusUseCase.execute()) return true
 
         coroutineScope.launch {
