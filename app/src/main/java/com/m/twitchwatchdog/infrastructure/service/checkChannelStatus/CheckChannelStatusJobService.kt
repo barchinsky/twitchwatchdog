@@ -54,6 +54,8 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
             }.onFailure {
                 println("Failed to complete fetching job!. $it")
             }
+
+            jobFinished(params, false)
         }
 
         return true
@@ -61,14 +63,15 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
 
     override fun onStopJob(params: JobParameters?): Boolean {
         coroutineScope.coroutineContext.cancelChildren()
-        return true
+        return false
     }
 
     private fun showNotification(content: String) {
-        val notification = NotificationCompat.Builder(
-            context,
-            context.getString(R.string.default_notification_channel_id)
-        )
+        val notification = NotificationCompat
+            .Builder(
+                context,
+                context.getString(R.string.default_notification_channel_id)
+            )
             .setContentText(content)
             .setContentIntent(getContentIntent())
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

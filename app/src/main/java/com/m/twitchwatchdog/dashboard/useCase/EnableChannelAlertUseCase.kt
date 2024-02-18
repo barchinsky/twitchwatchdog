@@ -17,6 +17,7 @@ internal class EnableChannelAlertUseCase @Inject constructor(
         val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
 
         val pendingJob = jobScheduler.getPendingJob(JOB_ID_ENABLE_ALERT.hashCode())
+        println("Pending job: ${pendingJob?.toString()}")
 
         if (pendingJob != null) {
             return
@@ -27,10 +28,11 @@ internal class EnableChannelAlertUseCase @Inject constructor(
                 JOB_ID_ENABLE_ALERT.hashCode(),
                 ComponentName(context, CheckChannelStatusJobService::class.java)
             )
-            .setPeriodic(TimeUnit.MINUTES.toMillis(30))
+            .setPeriodic(TimeUnit.MINUTES.toMillis(15))
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
             .setRequiresCharging(false)
             .setRequiresBatteryNotLow(false)
+            .setRequiresDeviceIdle(false)
             .build()
 
         jobScheduler.schedule(jobInfo)
