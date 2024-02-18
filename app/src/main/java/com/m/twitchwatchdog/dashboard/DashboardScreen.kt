@@ -32,6 +32,7 @@ import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 @Composable
 fun DashboardScreen(
     state: DashboardScreenState,
+    onChannelClicked: (ChannelInfo) -> Unit,
     onNotifyWhenLiveClicked: (ChannelInfo) -> Unit,
     onSaveChannelClicked: (String, Boolean) -> Unit,
 ) {
@@ -65,6 +66,7 @@ fun DashboardScreen(
                         items(state.channels.size) {
                             ChannelCard(
                                 channelInfo = state.channels[it],
+                                onChannelClicked = onChannelClicked,
                                 onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
                                 modifier = Modifier.padding(vertical = 8.dp),
                             )
@@ -114,6 +116,7 @@ private fun DashboardScreenPreview() {
         Surface {
             DashboardScreen(
                 state = DashboardScreenState(channels, loading = true),
+                onChannelClicked = {},
                 onNotifyWhenLiveClicked = {},
                 onSaveChannelClicked = { _, _ -> }
             )
