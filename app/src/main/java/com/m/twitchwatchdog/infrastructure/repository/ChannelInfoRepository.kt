@@ -12,15 +12,11 @@ class ChannelInfoRepository @Inject constructor(
     private val channelInfoLocalDataSource: ChannelInfoLocalDataSource,
 ) {
 
-    suspend fun getChannels(): List<ChannelInfo> {
-        val storedChannels = channelInfoLocalDataSource.getChannels()
-
-        return storedChannels.map { storedChannelInfo ->
-            runCatching { channelInfoRemoteDataSource.fetchChannelInfo(storedChannelInfo) }.getOrDefault(storedChannelInfo)
-        }.also {
-            channelInfoLocalDataSource.saveChannels(it)
-        }
-    }
+    suspend fun getChannels(): List<ChannelInfo> =
+        channelInfoLocalDataSource.getChannels().map { storedChannelInfo ->
+            runCatching { channelInfoRemoteDataSource.fetchChannelInfo(storedChannelInfo) }
+                .getOrDefault(storedChannelInfo)
+        }.also { channelInfoLocalDataSource.saveChannels(it) }
 
     suspend fun saveChannels(channels: List<ChannelInfo>) {
         channelInfoLocalDataSource.saveChannels(channels)

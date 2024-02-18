@@ -42,7 +42,15 @@ internal class DashboardViewModelImpl @Inject constructor(
     }
 
     override fun onChannelClicked(channelInfo: ChannelInfo) {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            val channels = state.value.channels.toMutableList()
+            val targetChannelIndex = channels.indexOfFirst { it.id == channelInfo.id }
+            channels[targetChannelIndex] = channelInfo.copy(expanded = !channelInfo.expanded)
+
+            state.update { it.copy(channels = channels) }
+
+            runCatching { storeChannelsInfoUseCase.execute(channels) }
+        }
     }
 
     override fun onSaveChannelClicked(channelName: String, notifyWhenLive: Boolean) {

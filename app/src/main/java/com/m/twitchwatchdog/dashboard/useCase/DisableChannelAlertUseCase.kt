@@ -11,8 +11,8 @@ class DisableChannelAlertUseCase @Inject constructor(
 ) {
 
     fun execute() {
-        val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-
-        val pendingJob = jobScheduler.cancel(JOB_ID_ENABLE_ALERT.hashCode())
+        println("Disable channel alert")
+        (context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler)
+            .cancel(JOB_ID_ENABLE_ALERT.hashCode())
     }
 }

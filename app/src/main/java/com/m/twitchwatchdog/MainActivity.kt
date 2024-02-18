@@ -58,6 +58,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     DashboardScreen(
                         state = dashboardScreenState,
+                        onChannelClicked = viewModel::onChannelClicked,
                         onNotifyWhenLiveClicked = viewModel::onNotifyWhenLiveClicked,
                         onSaveChannelClicked = viewModel::onSaveChannelClicked
                     )
