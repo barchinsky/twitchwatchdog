@@ -13,7 +13,7 @@ private val DarkColorScheme = darkColorScheme(
     inversePrimary = Green80,
     secondary = PurpleGrey80,
     tertiary = Pink80,
-    secondaryContainer = LightGrey
+    secondaryContainer = Grey
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -22,7 +22,7 @@ private val LightColorScheme = lightColorScheme(
     inversePrimary = Green80,
     secondary = Grey,
     tertiary = Pink80,
-    secondaryContainer = Color.White
+    secondaryContainer = LightGrey
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

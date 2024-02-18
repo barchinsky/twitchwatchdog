@@ -6,6 +6,7 @@ import android.app.job.JobParameters
 import android.app.job.JobService
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
 import com.m.twitchwatchdog.MainActivity
 import com.m.twitchwatchdog.R
@@ -37,7 +38,7 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
 
     override fun onStartJob(params: JobParameters?): Boolean {
         println("Should check status: ${shouldCheckChannelStatusUseCase.execute()}")
-        if (!shouldCheckChannelStatusUseCase.execute()) return true
+        if (!shouldCheckChannelStatusUseCase.execute()) return false
 
         coroutineScope.launch {
             println("Fetching channel info...")
@@ -58,7 +59,7 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
             jobFinished(params, false)
         }
 
-        return true
+        return false
     }
 
     override fun onStopJob(params: JobParameters?): Boolean {
@@ -76,6 +77,8 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
             .setContentIntent(getContentIntent())
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setLargeIcon(Icon.createWithResource(context, R.drawable.ic_launcher_foreground))
+            .setOnlyAlertOnce(true)
             .setAutoCancel(true)
             .build()
 
