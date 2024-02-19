@@ -3,11 +3,14 @@ package com.m.twitchwatchdog.dashboard
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -21,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.dashboard.addChannel.AddChannelCard
@@ -42,10 +46,7 @@ fun DashboardScreen(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .systemBarsPadding()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Crossfade(
             targetState = state.loading,
@@ -56,6 +57,7 @@ fun DashboardScreen(
                 LottieAnimation(
                     composition = loadingComposition,
                     isPlaying = true,
+                    iterations = LottieConstants.IterateForever,
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size(200.dp)
@@ -63,7 +65,9 @@ fun DashboardScreen(
             } else {
                 LazyColumn(
                     content = {
+                        item { Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars)) }
                         items(state.channels.size) {
+
                             ChannelCard(
                                 channelInfo = state.channels[it],
                                 onChannelClicked = onChannelClicked,
@@ -71,6 +75,7 @@ fun DashboardScreen(
                                 modifier = Modifier.padding(vertical = 8.dp),
                             )
                         }
+                        item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }
                     },
                     contentPadding = PaddingValues(16.dp),
                     modifier = Modifier.fillMaxSize()
@@ -85,7 +90,6 @@ fun DashboardScreen(
             onCloseClicked = { isAddChannelExpanded = false },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(8.dp)
         )
     }
 }
