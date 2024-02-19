@@ -7,6 +7,7 @@ import com.m.twitchwatchdog.dashboard.model.DashboardScreenState
 import com.m.twitchwatchdog.dashboard.useCase.AddChannelUseCase
 import com.m.twitchwatchdog.dashboard.useCase.DisableChannelAlertUseCase
 import com.m.twitchwatchdog.dashboard.useCase.EnableChannelAlertUseCase
+import com.m.twitchwatchdog.dashboard.useCase.IsSyncJobRunningUseCase
 import com.m.twitchwatchdog.dashboard.useCase.StoreChannelsInfoUseCase
 import com.m.twitchwatchdog.infrastructure.useCase.FetchChannelInfoUseCase
 import com.m.twitchwatchdog.infrastructure.useCase.GetChannelsFlowUseCase
@@ -26,6 +27,7 @@ internal class DashboardViewModelImpl @Inject constructor(
     private val enableChannelAlertUseCase: EnableChannelAlertUseCase,
     private val disableChannelAlertUseCase: DisableChannelAlertUseCase,
     private val addChannelUseCase: AddChannelUseCase,
+    private val isSyncJobRunningUseCase: IsSyncJobRunningUseCase,
 ) : DashboardViewModel, ViewModel() {
 
     override val state = MutableStateFlow(DashboardScreenState())
@@ -35,7 +37,8 @@ internal class DashboardViewModelImpl @Inject constructor(
             runCatching {
                 state.update { it.copy(loading = true) }
                 fetchChannelInfoUseCase.execute()
-                state.update { it.copy(loading = false) }
+                val syncJobRunning = isSyncJobRunningUseCase.execute()
+                state.update { it.copy(loading = false, syncJobRunning = syncJobRunning) }
             }.onFailure { t ->
                 println("Failed to fetch channel info: $t")
                 state.update { it.copy(loading = false) }

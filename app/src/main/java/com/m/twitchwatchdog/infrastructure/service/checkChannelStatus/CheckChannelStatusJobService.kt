@@ -38,7 +38,10 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
 
     override fun onStartJob(params: JobParameters?): Boolean {
         println("Should check status: ${shouldCheckChannelStatusUseCase.execute()}")
-        if (!shouldCheckChannelStatusUseCase.execute()) return false
+        if (!shouldCheckChannelStatusUseCase.execute()) {
+            jobFinished(params, false)
+            return true
+        }
 
         coroutineScope.launch {
             println("Fetching channel info...")
@@ -59,7 +62,7 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
             jobFinished(params, false)
         }
 
-        return false
+        return true
     }
 
     override fun onStopJob(params: JobParameters?): Boolean {
@@ -76,8 +79,7 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
             .setContentText(content)
             .setContentIntent(getContentIntent())
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setLargeIcon(Icon.createWithResource(context, R.drawable.ic_launcher_foreground))
+            .setSmallIcon(R.mipmap.ic_launcher_foreground)
             .setOnlyAlertOnce(true)
             .setAutoCancel(true)
             .build()
