@@ -9,8 +9,10 @@ import com.m.twitchwatchdog.dashboard.useCase.DisableChannelAlertUseCase
 import com.m.twitchwatchdog.dashboard.useCase.EnableChannelAlertUseCase
 import com.m.twitchwatchdog.dashboard.useCase.StoreChannelsInfoUseCase
 import com.m.twitchwatchdog.infrastructure.useCase.FetchChannelInfoUseCase
+import com.m.twitchwatchdog.infrastructure.useCase.GetChannelsFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class DashboardViewModelImpl @Inject constructor(
     private val fetchChannelInfoUseCase: FetchChannelInfoUseCase,
+    private val getChannelsFlowUseCase: GetChannelsFlowUseCase,
     private val storeChannelsInfoUseCase: StoreChannelsInfoUseCase,
     private val enableChannelAlertUseCase: EnableChannelAlertUseCase,
     private val disableChannelAlertUseCase: DisableChannelAlertUseCase,
@@ -31,13 +34,19 @@ internal class DashboardViewModelImpl @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 state.update { it.copy(loading = true) }
-                val newChannels = fetchChannelInfoUseCase.execute()
-
-                state.update { it.copy(channels = newChannels, loading = false) }
+                fetchChannelInfoUseCase.execute()
+                state.update { it.copy(loading = false) }
             }.onFailure { t ->
                 println("Failed to fetch channel info: $t")
                 state.update { it.copy(loading = false) }
             }
+        }
+
+        viewModelScope.launch {
+            getChannelsFlowUseCase.execute()
+                .collectLatest { channels ->
+                    state.update { it.copy(channels = channels) }
+                }
         }
     }
 
@@ -46,9 +55,6 @@ internal class DashboardViewModelImpl @Inject constructor(
             val channels = state.value.channels.toMutableList()
             val targetChannelIndex = channels.indexOfFirst { it.id == channelInfo.id }
             channels[targetChannelIndex] = channelInfo.copy(expanded = !channelInfo.expanded)
-
-            state.update { it.copy(channels = channels) }
-
             runCatching { storeChannelsInfoUseCase.execute(channels) }
         }
     }
@@ -62,9 +68,7 @@ internal class DashboardViewModelImpl @Inject constructor(
                 notifyWhenLive
             )
             runCatching {
-                val channels = addChannelUseCase.execute(channelInfo)
-
-                state.update { it.copy(channels = channels) }
+                addChannelUseCase.execute(channelInfo)
 
                 if (channelInfo.notifyWhenLive) {
                     enableChannelAlertUseCase.execute()
@@ -82,8 +86,6 @@ internal class DashboardViewModelImpl @Inject constructor(
             val targetChannel = channels.indexOfFirst { it.id == channelInfo.id }
 
             channels[targetChannel] = channelInfo.copy(notifyWhenLive = !channelInfo.notifyWhenLive)
-
-            state.update { it.copy(channels = channels) }
 
             storeChannelsInfoUseCase.execute(channels)
 
