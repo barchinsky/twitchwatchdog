@@ -33,6 +33,7 @@ internal class EnableChannelAlertUseCase @Inject constructor(
             .setRequiresCharging(false)
             .setRequiresBatteryNotLow(false)
             .setRequiresDeviceIdle(false)
+            .setPersisted(true)
             .build()
 
         jobScheduler.schedule(jobInfo)

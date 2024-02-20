@@ -37,8 +37,7 @@ internal class DashboardViewModelImpl @Inject constructor(
             runCatching {
                 state.update { it.copy(loading = true) }
                 fetchChannelInfoUseCase.execute()
-                val syncJobRunning = isSyncJobRunningUseCase.execute()
-                state.update { it.copy(loading = false, syncJobRunning = syncJobRunning) }
+                state.update { it.copy(loading = false) }
             }.onFailure { t ->
                 println("Failed to fetch channel info: $t")
                 state.update { it.copy(loading = false) }
@@ -48,7 +47,8 @@ internal class DashboardViewModelImpl @Inject constructor(
         viewModelScope.launch {
             getChannelsFlowUseCase.execute()
                 .collectLatest { channels ->
-                    state.update { it.copy(channels = channels) }
+                    println("New state arrived")
+                    state.update { it.copy(channels = channels, syncJobRunning = isSyncJobRunningUseCase.execute()) }
                 }
         }
     }
@@ -59,6 +59,7 @@ internal class DashboardViewModelImpl @Inject constructor(
             val targetChannelIndex = channels.indexOfFirst { it.id == channelInfo.id }
             channels[targetChannelIndex] = channelInfo.copy(expanded = !channelInfo.expanded)
             runCatching { storeChannelsInfoUseCase.execute(channels) }
+                .onFailure { println("Failed to store channels: $it") }
         }
     }
 
@@ -80,7 +81,6 @@ internal class DashboardViewModelImpl @Inject constructor(
                 println("Failed to add channel: $it")
             }
         }
-
     }
 
     override fun onNotifyWhenLiveClicked(channelInfo: ChannelInfo) {
@@ -90,13 +90,13 @@ internal class DashboardViewModelImpl @Inject constructor(
 
             channels[targetChannel] = channelInfo.copy(notifyWhenLive = !channelInfo.notifyWhenLive)
 
-            storeChannelsInfoUseCase.execute(channels)
-
             if (channels.any { it.notifyWhenLive }) {
                 enableChannelAlertUseCase.execute()
             } else {
                 disableChannelAlertUseCase.execute()
             }
+
+            storeChannelsInfoUseCase.execute(channels)
         }
     }
 }
