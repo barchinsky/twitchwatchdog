@@ -5,6 +5,8 @@ import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,13 +17,17 @@ class ChannelInfoLocalDataSource @Inject constructor(
     private val sharedPreferences: SharedPreferences,
 ) {
 
+    private val readMutex = Mutex()
+
     @OptIn(ExperimentalStdlibApi::class)
     private val channelsInfoAdapter = moshi.adapter<List<ChannelInfo>>()
 
     suspend fun getChannels(): List<ChannelInfo> = withContext(Dispatchers.IO) {
-        sharedPreferences.getString(KEY_CHANNELS, null)?.let {
-            channelsInfoAdapter.fromJson(it)
-        } ?: defaultChannels
+        readMutex.withLock {
+            sharedPreferences.getString(KEY_CHANNELS, null)?.let {
+                channelsInfoAdapter.fromJson(it)
+            } ?: defaultChannels
+        }
     }
 
     suspend fun saveChannels(channelInfo: List<ChannelInfo>): Unit = withContext(Dispatchers.IO) {

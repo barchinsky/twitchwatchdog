@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -31,6 +32,7 @@ import com.m.twitchwatchdog.dashboard.addChannel.AddChannelCard
 import com.m.twitchwatchdog.dashboard.channelCard.ChannelCard
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.model.DashboardScreenState
+import com.m.twitchwatchdog.dashboard.ui.topBar.TopBar
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
 @Composable
@@ -65,7 +67,16 @@ fun DashboardScreen(
             } else {
                 LazyColumn(
                     content = {
-                        item { Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars)) }
+                        item {
+                            TopBar(
+                                notificationsEnabled = true,
+                                syncJobEnabled = state.syncJobRunning,
+                                onNotificationsClick = { /*TODO*/ },
+                                onSettingsClick = { /*TODO*/ },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                        }
                         items(state.channels.size) {
 
                             ChannelCard(
@@ -119,7 +130,7 @@ private fun DashboardScreenPreview() {
     TwitchWatchdogTheme {
         Surface {
             DashboardScreen(
-                state = DashboardScreenState(channels, loading = true),
+                state = DashboardScreenState(channels, loading = false),
                 onChannelClicked = {},
                 onNotifyWhenLiveClicked = {},
                 onSaveChannelClicked = { _, _ -> }
