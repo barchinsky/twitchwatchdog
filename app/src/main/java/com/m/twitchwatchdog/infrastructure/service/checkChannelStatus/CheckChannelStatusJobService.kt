@@ -6,7 +6,6 @@ import android.app.job.JobParameters
 import android.app.job.JobService
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
 import com.m.twitchwatchdog.MainActivity
 import com.m.twitchwatchdog.R
@@ -53,7 +52,7 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
 
                 if (liveChannels.isNotEmpty()) {
                     val liveChannelNames = liveChannels.joinToString(",") { it.name }
-                    showNotification(context.getString(R.string.channels_online, liveChannelNames))
+                    showNotificationIfNeeded(context.getString(R.string.channels_online, liveChannelNames))
                 }
             }.onFailure {
                 println("Failed to complete fetching job!. $it")
@@ -70,7 +69,16 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
         return false
     }
 
-    private fun showNotification(content: String) {
+    private fun showNotificationIfNeeded(content: String) {
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Don't notify if previous notification is not cancelled
+        if (notificationManager.activeNotifications.any { it.id == content.hashCode() }) {
+            println("Previous notification is still active")
+            return
+        }
+
         val notification = NotificationCompat
             .Builder(
                 context,
@@ -84,9 +92,8 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
             .setAutoCancel(true)
             .build()
 
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(1, notification)
+
+        notificationManager.notify(content.hashCode(), notification)
     }
 
     private fun getContentIntent(): PendingIntent {
