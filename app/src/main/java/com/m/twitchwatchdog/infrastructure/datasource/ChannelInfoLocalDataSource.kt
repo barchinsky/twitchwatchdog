@@ -45,6 +45,15 @@ class ChannelInfoLocalDataSource @Inject constructor(
             }
     }
 
+    suspend fun deleteChannel(channelInfo: ChannelInfo): List<ChannelInfo> = withContext(Dispatchers.IO) {
+        getChannels()
+            .toMutableList()
+            .filter { it.id != channelInfo.id }
+            .also {
+                saveChannels(it)
+            }
+    }
+
     private companion object {
 
         const val KEY_CHANNELS = "channels_key"

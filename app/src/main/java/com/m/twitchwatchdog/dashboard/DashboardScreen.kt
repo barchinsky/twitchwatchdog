@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -33,6 +32,7 @@ import com.m.twitchwatchdog.dashboard.channelCard.ChannelCard
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.model.DashboardScreenState
 import com.m.twitchwatchdog.dashboard.ui.topBar.TopBar
+import com.m.twitchwatchdog.ui.swipeToDismiss.SwipeToDismissRow
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
 @Composable
@@ -41,6 +41,7 @@ fun DashboardScreen(
     onChannelClicked: (ChannelInfo) -> Unit,
     onNotifyWhenLiveClicked: (ChannelInfo) -> Unit,
     onSaveChannelClicked: (String, Boolean) -> Unit,
+    onDeleteClicked: (ChannelInfo) -> Unit,
 ) {
     val loadingComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loading))
     var isAddChannelExpanded by remember {
@@ -77,14 +78,21 @@ fun DashboardScreen(
                                     .fillMaxWidth()
                             )
                         }
-                        items(state.channels.size) {
-
-                            ChannelCard(
-                                channelInfo = state.channels[it],
-                                onChannelClicked = onChannelClicked,
-                                onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
-                                modifier = Modifier.padding(vertical = 8.dp),
-                            )
+                        items(
+                            count = state.channels.size,
+                            key = { index -> state.channels[index].id }
+                        ) {
+                            SwipeToDismissRow(
+                                item = state.channels[it],
+                                onDismissed = onDeleteClicked,
+                            ) { channelInfo ->
+                                ChannelCard(
+                                    channelInfo = channelInfo,
+                                    onChannelClicked = onChannelClicked,
+                                    onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
+                                    modifier = Modifier.padding(vertical = 8.dp),
+                                )
+                            }
                         }
                         item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }
                     },
@@ -133,7 +141,8 @@ private fun DashboardScreenPreview() {
                 state = DashboardScreenState(channels, loading = false),
                 onChannelClicked = {},
                 onNotifyWhenLiveClicked = {},
-                onSaveChannelClicked = { _, _ -> }
+                onSaveChannelClicked = { _, _ -> },
+                onDeleteClicked = {}
             )
         }
     }

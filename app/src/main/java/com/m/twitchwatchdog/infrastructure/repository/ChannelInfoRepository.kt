@@ -44,4 +44,10 @@ class ChannelInfoRepository @Inject constructor(
     suspend fun addChannel(channel: ChannelInfo): List<ChannelInfo> =
         channelInfoLocalDataSource.addChannel(channel)
             .run { fetchChannels() }
+
+    suspend fun deleteChannel(channel: ChannelInfo): List<ChannelInfo> =
+        channelInfoLocalDataSource.deleteChannel(channelInfo = channel)
+            .also {
+                channelsFlow.emit(it)
+            }
 }

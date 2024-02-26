@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.model.DashboardScreenState
 import com.m.twitchwatchdog.dashboard.useCase.AddChannelUseCase
+import com.m.twitchwatchdog.dashboard.useCase.DeleteChannelUseCase
 import com.m.twitchwatchdog.dashboard.useCase.DisableChannelAlertUseCase
 import com.m.twitchwatchdog.dashboard.useCase.EnableChannelAlertUseCase
 import com.m.twitchwatchdog.dashboard.useCase.IsSyncJobRunningUseCase
@@ -27,6 +28,7 @@ internal class DashboardViewModelImpl @Inject constructor(
     private val enableChannelAlertUseCase: EnableChannelAlertUseCase,
     private val disableChannelAlertUseCase: DisableChannelAlertUseCase,
     private val addChannelUseCase: AddChannelUseCase,
+    private val deleteChannelUseCase: DeleteChannelUseCase,
     private val isSyncJobRunningUseCase: IsSyncJobRunningUseCase,
 ) : DashboardViewModel, ViewModel() {
 
@@ -97,6 +99,12 @@ internal class DashboardViewModelImpl @Inject constructor(
             }
 
             storeChannelsInfoUseCase.execute(channels)
+        }
+    }
+
+    override fun onDeleteChannelClicked(channelInfo: ChannelInfo) {
+        viewModelScope.launch {
+            deleteChannelUseCase.execute(channelInfo)
         }
     }
 }

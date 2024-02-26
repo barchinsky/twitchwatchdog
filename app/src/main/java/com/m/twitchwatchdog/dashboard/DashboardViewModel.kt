@@ -13,4 +13,6 @@ interface DashboardViewModel {
     fun onSaveChannelClicked(channelName: String, notifyWhenLive: Boolean)
 
     fun onNotifyWhenLiveClicked(channelInfo: ChannelInfo)
+
+    fun onDeleteChannelClicked(channelInfo: ChannelInfo)
 }
