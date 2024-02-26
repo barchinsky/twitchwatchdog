@@ -29,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.m.twitchwatchdog.dashboard.DashboardScreen
 import com.m.twitchwatchdog.dashboard.DashboardViewModel
 import com.m.twitchwatchdog.dashboard.DashboardViewModelImpl
@@ -67,7 +68,8 @@ class MainActivity : ComponentActivity() {
                         state = dashboardScreenState,
                         onChannelClicked = viewModel::onChannelClicked,
                         onNotifyWhenLiveClicked = viewModel::onNotifyWhenLiveClicked,
-                        onSaveChannelClicked = viewModel::onSaveChannelClicked
+                        onSaveChannelClicked = viewModel::onSaveChannelClicked,
+                        onDeleteClicked = viewModel::onDeleteChannelClicked,
                     )
                 }
             }

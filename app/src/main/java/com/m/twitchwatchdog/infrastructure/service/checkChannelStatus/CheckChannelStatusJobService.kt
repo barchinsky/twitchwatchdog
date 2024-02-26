@@ -75,7 +75,6 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
 
         // Don't notify if previous notification is not cancelled
         if (notificationManager.activeNotifications.any { it.id == content.hashCode() }) {
-            println("Previous notification is still active")
             return
         }
 
@@ -91,7 +90,6 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
             .setOnlyAlertOnce(true)
             .setAutoCancel(true)
             .build()
-
 
         notificationManager.notify(content.hashCode(), notification)
     }
