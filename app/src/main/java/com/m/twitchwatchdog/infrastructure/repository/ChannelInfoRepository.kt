@@ -38,18 +38,23 @@ class ChannelInfoRepository @Inject constructor(
         return updatedChannels
     }
 
-    suspend fun saveChannels(channels: List<ChannelInfo>) {
+    suspend fun set(channels: List<ChannelInfo>) {
         channelInfoLocalDataSource.saveChannels(channels)
         channelsFlow.emit(channels)
     }
 
-    suspend fun addChannel(channel: ChannelInfo): List<ChannelInfo> =
+    suspend fun add(channel: ChannelInfo) =
         channelInfoLocalDataSource.addChannel(channel)
             .run { fetchChannels() }
 
-    suspend fun deleteChannel(channel: ChannelInfo): List<ChannelInfo> =
+    suspend fun delete(channel: ChannelInfo) =
         channelInfoLocalDataSource.deleteChannel(channelInfo = channel)
             .also {
                 channelsFlow.emit(it)
             }
+
+    suspend fun update(channel: ChannelInfo) {
+        channelInfoLocalDataSource.updateChannel(channel)
+        fetchChannels()
+    }
 }

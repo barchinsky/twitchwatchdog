@@ -12,7 +12,7 @@ class StoreChannelsInfoUseCase @Inject constructor(
 
     suspend fun execute(channels: List<ChannelInfo>) {
         withContext(Dispatchers.IO) {
-            channelInfoRepository.saveChannels(channels)
+            channelInfoRepository.set(channels)
         }
     }
 }
