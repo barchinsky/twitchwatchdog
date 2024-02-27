@@ -14,7 +14,8 @@ import com.m.twitchwatchdog.infrastructure.useCase.FetchChannelInfoUseCase
 import com.m.twitchwatchdog.infrastructure.useCase.GetChannelsFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -46,13 +47,14 @@ internal class DashboardViewModelImpl @Inject constructor(
             }
         }
 
-        viewModelScope.launch {
-            getChannelsFlowUseCase.execute()
-                .collectLatest { channels ->
-                    println("New state arrived")
-                    state.update { it.copy(channels = channels, syncJobRunning = isSyncJobRunningUseCase.execute()) }
+        getChannelsFlowUseCase.execute()
+            .onEach { channels ->
+                println("New state arrived")
+                state.update {
+                    it.copy(channels = channels, syncJobRunning = isSyncJobRunningUseCase.execute())
                 }
-        }
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun onChannelClicked(channelInfo: ChannelInfo) {
@@ -66,13 +68,13 @@ internal class DashboardViewModelImpl @Inject constructor(
     }
 
     override fun onSaveChannelClicked(channelName: String, notifyWhenLive: Boolean) {
-        println("New channel: $channelName notifyWhenLive: $notifyWhenLive")
         viewModelScope.launch {
             val channelInfo = ChannelInfo.getDefault(
                 Calendar.getInstance().timeInMillis,
                 channelName,
                 notifyWhenLive
             )
+
             runCatching {
                 addChannelUseCase.execute(channelInfo)
 

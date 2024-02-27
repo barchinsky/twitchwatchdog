@@ -21,15 +21,17 @@ class ChannelInfoRepository @Inject constructor(
         channelsFlow
 
     suspend fun fetchChannels(): List<ChannelInfo> {
-        val remoteChannelsState = channelInfoLocalDataSource.getChannels().map { storedChannelInfo ->
-            runCatching { channelInfoRemoteDataSource.fetchChannelInfo(storedChannelInfo) }
-                .getOrDefault(storedChannelInfo)
-        }
+        val remoteChannelsState = channelInfoLocalDataSource.getChannels()
+            .map { storedChannelInfo ->
+                runCatching { channelInfoRemoteDataSource.fetchChannelInfo(storedChannelInfo) }
+                    .getOrDefault(storedChannelInfo)
+            }
 
-        val updatedChannels = channelInfoLocalDataSource.getChannels().map { storedChannel ->
-            val status = remoteChannelsState.fastFirst { it.id == storedChannel.id }.status
-            storedChannel.copy(status = status)
-        }
+        val updatedChannels = channelInfoLocalDataSource.getChannels()
+            .map { storedChannel ->
+                val status = remoteChannelsState.fastFirst { it.id == storedChannel.id }.status
+                storedChannel.copy(status = status)
+            }
 
         channelInfoLocalDataSource.saveChannels(updatedChannels)
         channelsFlow.emit(updatedChannels)
