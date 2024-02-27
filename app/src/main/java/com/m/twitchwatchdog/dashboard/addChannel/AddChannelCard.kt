@@ -4,6 +4,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -35,9 +39,11 @@ import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.m.twitchwatchdog.infrastructure.ui.switchRow.SwitchRow
+import com.m.twitchwatchdog.ui.theme.DarkGreyAlpha80
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
 @Composable
@@ -55,7 +61,7 @@ fun AddChannelCard(
     val isSaveEnabled by remember { derivedStateOf { channelName.isNotBlank() } }
 
     val animatedBackgroundColor by animateColorAsState(
-        targetValue = MaterialTheme.colorScheme.secondaryContainer.takeIf { expanded }
+        targetValue = DarkGreyAlpha80.takeIf { expanded }
             ?: defaultBackgroundColor,
         label = "Background color"
     )
@@ -67,27 +73,39 @@ fun AddChannelCard(
     val animatedAddButtonAlignment by animateHorizontalAlignmentAsState(expanded)
 
     Box(
+        contentAlignment = Alignment.BottomEnd,
         modifier = Modifier
-            .clip(RoundedCornerShape(4.dp))
-            .padding(animatedCardPadding)
-            .background(animatedBackgroundColor, RoundedCornerShape(6.dp))
+            .fillMaxSize()
+            .background(animatedBackgroundColor)
             .imePadding()
             .then(modifier),
     ) {
-        Column {
-            AnimatedVisibility(visible = expanded) {
+        Column(
+            modifier = Modifier
+                .padding(animatedCardPadding)
+                .background(
+                    color = MaterialTheme.colorScheme.background.takeIf { expanded }
+                        ?: Color.Transparent,
+                    shape = RoundedCornerShape(6.dp)
+                )
+        ) {
+            AnimatedVisibility(
+                visible = expanded,
+                enter = expandVertically() + expandHorizontally(),
+                exit = shrinkVertically() + shrinkHorizontally()
+            ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
                 ) {
                     Icon(Icons.Filled.Close,
-                        contentDescription = "Close",
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .align(Alignment.End)
-                            .clickable {
-                                onCloseClicked()
-                                channelName = ""
-                            }
+                         contentDescription = "Close",
+                         modifier = Modifier
+                             .padding(4.dp)
+                             .align(Alignment.End)
+                             .clickable {
+                                 onCloseClicked()
+                                 channelName = ""
+                             }
                     )
                     OutlinedTextField(
                         value = channelName,
@@ -138,6 +156,24 @@ fun AddChannelCardPreview() {
             Box(modifier = Modifier.fillMaxSize()) {
                 AddChannelCard(
                     expanded = false,
+                    onAddChannelClicked = {},
+                    onSaveChannelClicked = { _, _ -> },
+                    onCloseClicked = {},
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+@PreviewLightDark
+fun AddChannelCardExpandedPreview() {
+    TwitchWatchdogTheme {
+        Surface {
+            Box(modifier = Modifier.fillMaxSize()) {
+                AddChannelCard(
+                    expanded = true,
                     onAddChannelClicked = {},
                     onSaveChannelClicked = { _, _ -> },
                     onCloseClicked = {},
