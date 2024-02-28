@@ -7,15 +7,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
@@ -46,15 +47,6 @@ fun ChannelInfoCard(
                 onCheckedChange = { onNotifyWhenLiveClicked(channelInfo) },
             )
         }
-        Spacer(modifier = Modifier.heightIn(8.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = "Live since", color = MaterialTheme.colorScheme.onPrimary)
-            Text(text = "2h", color = MaterialTheme.colorScheme.onPrimary)
-        }
     }
 }
 
@@ -66,7 +58,7 @@ fun ChannelInfoPreview() {
             channelInfo = ChannelInfo.getDefault(
                 1,
                 "PGL",
-                true
+                true,
             ),
             onNotifyWhenLiveClicked = {}
         )

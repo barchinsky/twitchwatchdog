@@ -27,7 +27,8 @@ class ChannelInfoRepository @Inject constructor(
                         channelInfoRemoteDataSource.fetchChannelInfo(storedChannelInfo)
                     storedChannelInfo.copy(
                         status = remoteChannel.status,
-                        avatarUrl = remoteChannel.avatarUrl
+                        avatarUrl = remoteChannel.avatarUrl,
+                        watchingNow = remoteChannel.watchingNow,
                     )
                 }.getOrDefault(storedChannelInfo)
             }

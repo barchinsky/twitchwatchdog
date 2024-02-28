@@ -11,6 +11,7 @@ data class ChannelInfo(
     val loading: Boolean,
     val expanded: Boolean,
     val notifyWhenLive: Boolean = false,
+    val watchingNow: String = ""
 ) {
 
     enum class Status {

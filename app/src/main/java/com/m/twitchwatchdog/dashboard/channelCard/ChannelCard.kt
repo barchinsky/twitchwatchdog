@@ -90,7 +90,7 @@ fun ChannelCard(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
             }
-            ChannelStatusBadge(channelInfo.status)
+            ChannelStatusBadge(channelInfo)
         }
 
         AnimatedVisibility(visible = channelInfo.expanded) {
@@ -113,6 +113,7 @@ fun ChannelCardPreview() {
                 "s1mple",
                 ChannelInfo.Status.LIVE,
                 "",
+                watchingNow = "32K",
                 loading = false,
                 expanded = true,
                 notifyWhenLive = true

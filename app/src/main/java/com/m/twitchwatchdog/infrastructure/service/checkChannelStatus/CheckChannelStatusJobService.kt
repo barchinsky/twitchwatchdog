@@ -83,6 +83,7 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
                 context,
                 context.getString(R.string.default_notification_channel_id)
             )
+            .setContentTitle(getString(R.string.channel_is_live_title))
             .setContentText(content)
             .setContentIntent(getContentIntent())
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
