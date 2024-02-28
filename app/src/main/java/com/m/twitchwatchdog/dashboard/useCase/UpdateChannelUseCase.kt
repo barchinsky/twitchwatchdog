@@ -4,10 +4,11 @@ import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.infrastructure.repository.ChannelInfoRepository
 import javax.inject.Inject
 
-class DeleteChannelUseCase @Inject constructor(
-    private val channelInfoRepository: ChannelInfoRepository,
+class UpdateChannelUseCase @Inject constructor(
+    private val channelInfoRepository: ChannelInfoRepository
 ) {
 
-    suspend fun execute(channelInfo: ChannelInfo) =
-        channelInfoRepository.delete(channelInfo)
+    suspend fun execute(channel: ChannelInfo) =
+        channelInfoRepository.update(channel)
+
 }

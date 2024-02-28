@@ -11,6 +11,6 @@ internal class AddChannelUseCase @Inject constructor(
 ) {
 
     suspend fun execute(channel: ChannelInfo): List<ChannelInfo> = withContext(Dispatchers.IO) {
-        channelInfoRepository.addChannel(channel)
+        channelInfoRepository.add(channel)
     }
 }

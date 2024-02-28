@@ -19,39 +19,61 @@ class ChannelInfoLocalDataSource @Inject constructor(
 
     private val readMutex = Mutex()
 
+    private val channelsCache = mutableListOf<ChannelInfo>()
+
     @OptIn(ExperimentalStdlibApi::class)
     private val channelsInfoAdapter = moshi.adapter<List<ChannelInfo>>()
 
     suspend fun getChannels(): List<ChannelInfo> = withContext(Dispatchers.IO) {
         readMutex.withLock {
-            sharedPreferences.getString(KEY_CHANNELS, null)?.let {
-                channelsInfoAdapter.fromJson(it)
-            } ?: defaultChannels
+            if (channelsCache.isEmpty()) {
+                val channels = sharedPreferences.getString(KEY_CHANNELS, null)?.let {
+                    channelsInfoAdapter.fromJson(it)
+                } ?: defaultChannels
+                channelsCache.addAll(channels)
+                channelsCache.toList()
+            } else {
+                channelsCache.toList()
+            }
         }
     }
 
     suspend fun saveChannels(channelInfo: List<ChannelInfo>): Unit = withContext(Dispatchers.IO) {
-        sharedPreferences.edit()
-            .putString(KEY_CHANNELS, channelsInfoAdapter.toJson(channelInfo))
-            .commit()
+        channelsCache.clear()
+        channelsCache.addAll(channelInfo)
+        dumpChannels()
     }
 
     suspend fun addChannel(channelInfo: ChannelInfo): List<ChannelInfo> = withContext(Dispatchers.IO) {
-        getChannels()
-            .toMutableList()
-            .also {
-                it.add(channelInfo)
-                saveChannels(it)
+        channelsCache
+            .apply {
+                add(channelInfo)
+                dumpChannels()
+            }
+    }
+
+    suspend fun updateChannel(channelInfo: ChannelInfo): List<ChannelInfo> = withContext(Dispatchers.IO) {
+        channelsCache
+            .also { channels ->
+                val targetChannelIndex = channels.indexOfFirst { it.id == channelInfo.id }
+
+                channels[targetChannelIndex] = channelInfo
+                dumpChannels()
             }
     }
 
     suspend fun deleteChannel(channelInfo: ChannelInfo): List<ChannelInfo> = withContext(Dispatchers.IO) {
-        getChannels()
-            .toMutableList()
+        channelsCache
             .filter { it.id != channelInfo.id }
             .also {
                 saveChannels(it)
             }
+    }
+
+    private suspend fun dumpChannels() = withContext(Dispatchers.IO) {
+        sharedPreferences.edit()
+            .putString(KEY_CHANNELS, channelsInfoAdapter.toJson(channelsCache))
+            .apply()
     }
 
     private companion object {
@@ -61,7 +83,7 @@ class ChannelInfoLocalDataSource @Inject constructor(
         val defaultChannels = listOf(
             ChannelInfo(
                 id = 1,
-                name = "s1mple",
+                name = "rocketleague",
                 status = ChannelInfo.Status.OFFLINE,
                 avatarUrl = null,
                 expanded = false,

@@ -9,12 +9,13 @@ import com.m.twitchwatchdog.dashboard.useCase.DeleteChannelUseCase
 import com.m.twitchwatchdog.dashboard.useCase.DisableChannelAlertUseCase
 import com.m.twitchwatchdog.dashboard.useCase.EnableChannelAlertUseCase
 import com.m.twitchwatchdog.dashboard.useCase.IsSyncJobRunningUseCase
-import com.m.twitchwatchdog.dashboard.useCase.StoreChannelsInfoUseCase
+import com.m.twitchwatchdog.dashboard.useCase.UpdateChannelUseCase
 import com.m.twitchwatchdog.infrastructure.useCase.FetchChannelInfoUseCase
 import com.m.twitchwatchdog.infrastructure.useCase.GetChannelsFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -22,13 +23,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class DashboardViewModelImpl @Inject constructor(
+    getChannelsFlowUseCase: GetChannelsFlowUseCase,
     private val fetchChannelInfoUseCase: FetchChannelInfoUseCase,
-    private val getChannelsFlowUseCase: GetChannelsFlowUseCase,
-    private val storeChannelsInfoUseCase: StoreChannelsInfoUseCase,
     private val enableChannelAlertUseCase: EnableChannelAlertUseCase,
     private val disableChannelAlertUseCase: DisableChannelAlertUseCase,
     private val addChannelUseCase: AddChannelUseCase,
     private val deleteChannelUseCase: DeleteChannelUseCase,
+    private val updateChannelUseCase: UpdateChannelUseCase,
     private val isSyncJobRunningUseCase: IsSyncJobRunningUseCase,
 ) : DashboardViewModel, ViewModel() {
 
@@ -46,33 +47,37 @@ internal class DashboardViewModelImpl @Inject constructor(
             }
         }
 
-        viewModelScope.launch {
-            getChannelsFlowUseCase.execute()
-                .collectLatest { channels ->
-                    println("New state arrived")
-                    state.update { it.copy(channels = channels, syncJobRunning = isSyncJobRunningUseCase.execute()) }
+        getChannelsFlowUseCase.execute()
+            .onEach { channels ->
+                println("New state arrived")
+                if (channels.any { it.notifyWhenLive }) {
+                    enableChannelAlertUseCase.execute()
+                } else {
+                    disableChannelAlertUseCase.execute()
                 }
-        }
+
+                state.update {
+                    it.copy(channels = channels, syncJobRunning = isSyncJobRunningUseCase.execute())
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun onChannelClicked(channelInfo: ChannelInfo) {
         viewModelScope.launch {
-            val channels = state.value.channels.toMutableList()
-            val targetChannelIndex = channels.indexOfFirst { it.id == channelInfo.id }
-            channels[targetChannelIndex] = channelInfo.copy(expanded = !channelInfo.expanded)
-            runCatching { storeChannelsInfoUseCase.execute(channels) }
-                .onFailure { println("Failed to store channels: $it") }
+            runCatching { updateChannelUseCase.execute(channelInfo.copy(expanded = !channelInfo.expanded)) }
+                .onFailure { println("Failed to update channel: $it") }
         }
     }
 
     override fun onSaveChannelClicked(channelName: String, notifyWhenLive: Boolean) {
-        println("New channel: $channelName notifyWhenLive: $notifyWhenLive")
         viewModelScope.launch {
             val channelInfo = ChannelInfo.getDefault(
                 Calendar.getInstance().timeInMillis,
-                channelName,
+                channelName.trim(),
                 notifyWhenLive
             )
+
             runCatching {
                 addChannelUseCase.execute(channelInfo)
 
@@ -87,18 +92,7 @@ internal class DashboardViewModelImpl @Inject constructor(
 
     override fun onNotifyWhenLiveClicked(channelInfo: ChannelInfo) {
         viewModelScope.launch {
-            val channels = state.value.channels.toMutableList()
-            val targetChannel = channels.indexOfFirst { it.id == channelInfo.id }
-
-            channels[targetChannel] = channelInfo.copy(notifyWhenLive = !channelInfo.notifyWhenLive)
-
-            if (channels.any { it.notifyWhenLive }) {
-                enableChannelAlertUseCase.execute()
-            } else {
-                disableChannelAlertUseCase.execute()
-            }
-
-            storeChannelsInfoUseCase.execute(channels)
+            runCatching { updateChannelUseCase.execute(channelInfo.copy(notifyWhenLive = !channelInfo.notifyWhenLive)) }
         }
     }
 

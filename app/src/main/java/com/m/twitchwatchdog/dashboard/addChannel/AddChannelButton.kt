@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
@@ -35,43 +34,47 @@ fun AddChannelButton(
     onSaveChannelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val buttonBackgroundColor = MaterialTheme.colorScheme.primary.takeIf { enabled || !expanded }
+        ?: MaterialTheme.colorScheme.inversePrimary
 
     Card(
         shape = CardDefaults.elevatedShape,
         colors = CardDefaults.elevatedCardColors(),
         elevation = CardDefaults.elevatedCardElevation(),
-        modifier = Modifier
-            .padding(6.dp)
-            .then(modifier)
+        modifier = Modifier.then(modifier)
+    ) {
+        Row(modifier = Modifier
             .clickable {
                 if (enabled && expanded) {
                     onSaveChannelClick()
                 } else {
                     onAddChannelClick()
                 }
-            },
-    ) {
-        Row(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primary.takeIf { enabled || !expanded }
-                    ?: MaterialTheme.colorScheme.inversePrimary,
-                    RoundedCornerShape(6.dp))
-                .padding(12.dp)
-                .animateContentSize(),
+            }
+            .background(buttonBackgroundColor, RoundedCornerShape(6.dp))
+            .padding(12.dp)
+            .animateContentSize(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
+            horizontalArrangement = Arrangement.Center) {
             Crossfade(targetState = expanded, label = "Icon") {
                 if (it) {
-                    Icon(Icons.Filled.Done, "Save channel", tint =  MaterialTheme.colorScheme.onPrimary)
+                    Icon(
+                        Icons.Filled.Done,
+                        "Save channel",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 } else {
-                    Icon(Icons.Filled.Add, "Add channel", tint =  MaterialTheme.colorScheme.onPrimary)
+                    Icon(
+                        Icons.Filled.Add, "Add channel", tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
             Spacer(modifier = Modifier.width(4.dp))
-            Text(text = "Save".takeIf { expanded } ?: "Add channel",
+            Text(
+                text = "Save".takeIf { expanded } ?: "Add channel",
                 fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onPrimary)
+                color = MaterialTheme.colorScheme.onPrimary
+            )
         }
     }
 
@@ -81,10 +84,9 @@ fun AddChannelButton(
 @PreviewLightDark
 private fun AddChannelButtonPreview() {
     TwitchWatchdogTheme {
-        AddChannelButton(
-            expanded = false,
-            enabled = true,
-            onAddChannelClick = {},
-            onSaveChannelClick = {})
+        AddChannelButton(expanded = false,
+                         enabled = true,
+                         onAddChannelClick = {},
+                         onSaveChannelClick = {})
     }
 }

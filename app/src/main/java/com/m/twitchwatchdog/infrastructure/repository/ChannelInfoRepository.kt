@@ -21,33 +21,40 @@ class ChannelInfoRepository @Inject constructor(
         channelsFlow
 
     suspend fun fetchChannels(): List<ChannelInfo> {
-        val remoteChannelsState = channelInfoLocalDataSource.getChannels().map { storedChannelInfo ->
-            runCatching { channelInfoRemoteDataSource.fetchChannelInfo(storedChannelInfo) }
-                .getOrDefault(storedChannelInfo)
-        }
+        val remoteChannelsState = channelInfoLocalDataSource.getChannels()
+            .map { storedChannelInfo ->
+                runCatching { channelInfoRemoteDataSource.fetchChannelInfo(storedChannelInfo) }
+                    .getOrDefault(storedChannelInfo)
+            }
 
-        val updatedChannels = channelInfoLocalDataSource.getChannels().map { storedChannel ->
-            val status = remoteChannelsState.fastFirst { it.id == storedChannel.id }.status
-            storedChannel.copy(status = status)
-        }
+        val updatedChannels = channelInfoLocalDataSource.getChannels()
+            .map { storedChannel ->
+                val status = remoteChannelsState.fastFirst { it.id == storedChannel.id }.status
+                storedChannel.copy(status = status)
+            }
 
         channelInfoLocalDataSource.saveChannels(updatedChannels)
         channelsFlow.emit(updatedChannels)
         return updatedChannels
     }
 
-    suspend fun saveChannels(channels: List<ChannelInfo>) {
+    suspend fun set(channels: List<ChannelInfo>) {
         channelInfoLocalDataSource.saveChannels(channels)
         channelsFlow.emit(channels)
     }
 
-    suspend fun addChannel(channel: ChannelInfo): List<ChannelInfo> =
+    suspend fun add(channel: ChannelInfo) =
         channelInfoLocalDataSource.addChannel(channel)
             .run { fetchChannels() }
 
-    suspend fun deleteChannel(channel: ChannelInfo): List<ChannelInfo> =
+    suspend fun delete(channel: ChannelInfo) =
         channelInfoLocalDataSource.deleteChannel(channelInfo = channel)
             .also {
                 channelsFlow.emit(it)
             }
+
+    suspend fun update(channel: ChannelInfo) {
+        channelInfoLocalDataSource.updateChannel(channel)
+        fetchChannels()
+    }
 }
