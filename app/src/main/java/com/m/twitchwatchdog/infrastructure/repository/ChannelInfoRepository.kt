@@ -1,6 +1,5 @@
 package com.m.twitchwatchdog.infrastructure.repository
 
-import androidx.compose.ui.util.fastFirst
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.infrastructure.datasource.ChannelInfoLocalDataSource
 import com.m.twitchwatchdog.infrastructure.datasource.ChannelInfoRemoteDataSource
@@ -21,21 +20,21 @@ class ChannelInfoRepository @Inject constructor(
         channelsFlow
 
     suspend fun fetchChannels(): List<ChannelInfo> {
-        val remoteChannelsState = channelInfoLocalDataSource.getChannels()
+        val channels = channelInfoLocalDataSource.getChannels()
             .map { storedChannelInfo ->
-                runCatching { channelInfoRemoteDataSource.fetchChannelInfo(storedChannelInfo) }
-                    .getOrDefault(storedChannelInfo)
+                runCatching {
+                    val remoteChannel =
+                        channelInfoRemoteDataSource.fetchChannelInfo(storedChannelInfo)
+                    storedChannelInfo.copy(
+                        status = remoteChannel.status,
+                        avatarUrl = remoteChannel.avatarUrl
+                    )
+                }.getOrDefault(storedChannelInfo)
             }
 
-        val updatedChannels = channelInfoLocalDataSource.getChannels()
-            .map { storedChannel ->
-                val status = remoteChannelsState.fastFirst { it.id == storedChannel.id }.status
-                storedChannel.copy(status = status)
-            }
-
-        channelInfoLocalDataSource.saveChannels(updatedChannels)
-        channelsFlow.emit(updatedChannels)
-        return updatedChannels
+        channelInfoLocalDataSource.saveChannels(channels)
+        channelsFlow.emit(channels)
+        return channels
     }
 
     suspend fun set(channels: List<ChannelInfo>) {
