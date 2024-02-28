@@ -133,10 +133,10 @@ fun AddChannelCard(
                             onDone = {
                                 onSaveChannelClicked(channelName, shouldNotify)
                                 focusRequester.freeFocus()
-                                softKeyboardController?.hide()
                                 channelName = ""
                             }
                         ),
+                        maxLines = 1,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -158,7 +158,6 @@ fun AddChannelCard(
                 onSaveChannelClick = {
                     onSaveChannelClicked(channelName, shouldNotify)
                     focusRequester.freeFocus()
-                    softKeyboardController?.hide()
                     channelName = ""
                 },
                 modifier = Modifier

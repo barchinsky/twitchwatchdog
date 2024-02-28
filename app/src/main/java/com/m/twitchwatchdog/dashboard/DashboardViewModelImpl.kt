@@ -74,7 +74,7 @@ internal class DashboardViewModelImpl @Inject constructor(
         viewModelScope.launch {
             val channelInfo = ChannelInfo.getDefault(
                 Calendar.getInstance().timeInMillis,
-                channelName,
+                channelName.trim(),
                 notifyWhenLive
             )
 
