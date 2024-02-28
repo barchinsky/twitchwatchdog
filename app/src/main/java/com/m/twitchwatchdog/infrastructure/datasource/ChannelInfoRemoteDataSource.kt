@@ -1,6 +1,8 @@
 package com.m.twitchwatchdog.infrastructure.datasource
 
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -8,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class ChannelInfoRemoteDataSource @Inject constructor() {
 
-    suspend fun fetchChannelInfo(channelInfo: ChannelInfo): ChannelInfo {
+    suspend fun fetchChannelInfo(channelInfo: ChannelInfo): ChannelInfo = withContext(Dispatchers.IO) {
         val page = Jsoup.connect("https://m.twitch.tv/${channelInfo.name}/about")
             .get()
 
@@ -34,6 +36,6 @@ class ChannelInfoRemoteDataSource @Inject constructor() {
             }
         } else channelInfo.avatarUrl
 
-        return channelInfo.copy(status = status, avatarUrl = avatarUrl)
+        channelInfo.copy(status = status, avatarUrl = avatarUrl)
     }
 }

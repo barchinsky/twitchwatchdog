@@ -2,16 +2,8 @@ package com.m.twitchwatchdog.dashboard
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,11 +20,11 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.dashboard.addChannel.AddChannelCard
-import com.m.twitchwatchdog.dashboard.channelCard.ChannelCard
+import com.m.twitchwatchdog.dashboard.channelsList.ChannelsList
+import com.m.twitchwatchdog.dashboard.loadingChannels.LoadingChannels
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.model.DashboardScreenState
-import com.m.twitchwatchdog.dashboard.ui.topBar.TopBar
-import com.m.twitchwatchdog.ui.swipeToDismiss.SwipeToDismissRow
+import com.m.twitchwatchdog.dashboard.noChannelsCard.NoChannelsCard
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
 @Composable
@@ -43,7 +35,7 @@ fun DashboardScreen(
     onSaveChannelClicked: (String, Boolean) -> Unit,
     onDeleteClicked: (ChannelInfo) -> Unit,
 ) {
-    val loadingComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loading))
+
     var isAddChannelExpanded by remember {
         mutableStateOf(false)
     }
@@ -56,49 +48,21 @@ fun DashboardScreen(
             label = "Loading content",
             modifier = Modifier.align(Alignment.Center)
         ) { loading ->
-            if (loading) {
-                LottieAnimation(
-                    composition = loadingComposition,
-                    isPlaying = true,
-                    iterations = LottieConstants.IterateForever,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(200.dp)
-                )
-            } else {
-                LazyColumn(
-                    content = {
-                        item {
-                            TopBar(
-                                notificationsEnabled = true,
-                                syncJobEnabled = state.syncJobRunning,
-                                onNotificationsClick = { /*TODO*/ },
-                                onSettingsClick = { /*TODO*/ },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            )
-                        }
-                        items(
-                            count = state.channels.size,
-                            key = { index -> state.channels[index].id }
-                        ) {
-                            SwipeToDismissRow(
-                                item = state.channels[it],
-                                onDismissed = onDeleteClicked,
-                            ) { channelInfo ->
-                                ChannelCard(
-                                    channelInfo = channelInfo,
-                                    onChannelClicked = onChannelClicked,
-                                    onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
-                                    modifier = Modifier.padding(vertical = 8.dp),
-                                )
-                            }
-                        }
-                        item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }
-                    },
-                    contentPadding = PaddingValues(16.dp),
-                    modifier = Modifier.fillMaxSize()
-                )
+            when {
+                loading -> LoadingChannels(modifier = Modifier.align(Alignment.Center))
+
+                state.channels.isEmpty() -> NoChannelsCard()
+
+                else -> {
+                    ChannelsList(
+                        channels = state.channels,
+                        syncJobRunning = state.loading,
+                        onChannelClicked = onChannelClicked,
+                        onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
+                        onDeleteClicked = onDeleteClicked,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
             }
         }
 
