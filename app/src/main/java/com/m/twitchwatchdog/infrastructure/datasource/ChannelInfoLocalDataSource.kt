@@ -38,42 +38,46 @@ class ChannelInfoLocalDataSource @Inject constructor(
         }
     }
 
-    suspend fun saveChannels(channelInfo: List<ChannelInfo>): Unit = withContext(Dispatchers.IO) {
+    suspend fun saveChannels(channelInfo: List<ChannelInfo>): List<ChannelInfo> = withContext(Dispatchers.IO) {
         channelsCache.clear()
         channelsCache.addAll(channelInfo)
         dumpChannels()
+        channelsCache.toList()
     }
 
-    suspend fun addChannel(channelInfo: ChannelInfo): List<ChannelInfo> = withContext(Dispatchers.IO) {
-        channelsCache
-            .apply {
-                add(channelInfo)
-                dumpChannels()
-            }
-    }
+    suspend fun addChannel(channelInfo: ChannelInfo): List<ChannelInfo> =
+        withContext(Dispatchers.IO) {
+            channelsCache
+                .apply {
+                    add(channelInfo)
+                    dumpChannels()
+                }
+                .toList()
+        }
 
-    suspend fun updateChannel(channelInfo: ChannelInfo): List<ChannelInfo> = withContext(Dispatchers.IO) {
-        channelsCache
-            .also { channels ->
-                val targetChannelIndex = channels.indexOfFirst { it.id == channelInfo.id }
+    suspend fun updateChannel(channelInfo: ChannelInfo): List<ChannelInfo> =
+        withContext(Dispatchers.IO) {
+            channelsCache
+                .also { channels ->
+                    val targetChannelIndex = channels.indexOfFirst { it.id == channelInfo.id }
 
-                channels[targetChannelIndex] = channelInfo
-                dumpChannels()
-            }
-    }
+                    channels[targetChannelIndex] = channelInfo
+                    dumpChannels()
+                }
+                .toList()
+        }
 
-    suspend fun deleteChannel(channelInfo: ChannelInfo): List<ChannelInfo> = withContext(Dispatchers.IO) {
-        channelsCache
-            .filter { it.id != channelInfo.id }
-            .also {
-                saveChannels(it)
-            }
-    }
+    suspend fun deleteChannel(channelInfo: ChannelInfo): List<ChannelInfo> =
+        withContext(Dispatchers.IO) {
+            channelsCache
+                .filter { it.id != channelInfo.id }
+                .also { saveChannels(it) }
+        }
 
     private suspend fun dumpChannels() = withContext(Dispatchers.IO) {
         sharedPreferences.edit()
             .putString(KEY_CHANNELS, channelsInfoAdapter.toJson(channelsCache))
-            .apply()
+            .commit()
     }
 
     private companion object {

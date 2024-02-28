@@ -38,22 +38,21 @@ class ChannelInfoRepository @Inject constructor(
     }
 
     suspend fun set(channels: List<ChannelInfo>) {
-        channelInfoLocalDataSource.saveChannels(channels)
-        channelsFlow.emit(channels)
+        withChannelsFlowUpdate { channelInfoLocalDataSource.saveChannels(channels) }
     }
 
     suspend fun add(channel: ChannelInfo) =
-        channelInfoLocalDataSource.addChannel(channel)
-            .run { fetchChannels() }
+        withChannelsFlowUpdate { channelInfoLocalDataSource.addChannel(channel) }
+            .also { fetchChannels() }
 
     suspend fun delete(channel: ChannelInfo) =
-        channelInfoLocalDataSource.deleteChannel(channelInfo = channel)
-            .also {
-                channelsFlow.emit(it)
-            }
+        withChannelsFlowUpdate { channelInfoLocalDataSource.deleteChannel(channelInfo = channel) }
 
     suspend fun update(channel: ChannelInfo) {
-        channelInfoLocalDataSource.updateChannel(channel)
-        fetchChannels()
+        withChannelsFlowUpdate { channelInfoLocalDataSource.updateChannel(channel) }
+    }
+
+    private suspend fun withChannelsFlowUpdate(block: suspend () -> List<ChannelInfo>) {
+        channelsFlow.emit(block())
     }
 }

@@ -49,7 +49,6 @@ internal class DashboardViewModelImpl @Inject constructor(
 
         getChannelsFlowUseCase.execute()
             .onEach { channels ->
-                println("New state arrived")
                 if (channels.any { it.notifyWhenLive }) {
                     enableChannelAlertUseCase.execute()
                 } else {

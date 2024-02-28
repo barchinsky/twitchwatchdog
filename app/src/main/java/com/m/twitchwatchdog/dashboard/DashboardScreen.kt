@@ -57,7 +57,7 @@ fun DashboardScreen(
                 else -> {
                     ChannelsList(
                         channels = state.channels,
-                        syncJobRunning = state.loading,
+                        syncJobRunning = state.syncJobRunning,
                         onChannelClicked = onChannelClicked,
                         onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
                         onDeleteClicked = onDeleteClicked,

@@ -5,10 +5,9 @@ import com.m.twitchwatchdog.infrastructure.repository.ChannelInfoRepository
 import javax.inject.Inject
 
 class UpdateChannelUseCase @Inject constructor(
-    private val channelInfoRepository: ChannelInfoRepository
+    private val channelInfoRepository: ChannelInfoRepository,
 ) {
 
     suspend fun execute(channel: ChannelInfo) =
         channelInfoRepository.update(channel)
-
 }
