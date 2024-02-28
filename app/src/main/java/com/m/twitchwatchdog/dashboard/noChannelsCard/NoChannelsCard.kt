@@ -1,6 +1,7 @@
 package com.m.twitchwatchdog.dashboard.noChannelsCard
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -10,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
@@ -26,7 +28,11 @@ fun NoChannelsCard(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LottieAnimation(composition = noChannelsAnimation, isPlaying = true)
+        LottieAnimation(
+            composition = noChannelsAnimation,
+            isPlaying = true,
+            modifier = Modifier.size(250.dp)
+        )
         Text(
             text = "No channels added yet!\n Add the first one!",
             color = MaterialTheme.colorScheme.onPrimary,

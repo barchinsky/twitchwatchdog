@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -78,7 +79,7 @@ fun DashboardScreen(
 }
 
 @Composable
-@Preview(showSystemUi = true)
+@PreviewLightDark
 private fun DashboardScreenPreview() {
     val channels = listOf(
         ChannelInfo(
@@ -102,7 +103,7 @@ private fun DashboardScreenPreview() {
     TwitchWatchdogTheme {
         Surface {
             DashboardScreen(
-                state = DashboardScreenState(channels, loading = false),
+                state = DashboardScreenState(emptyList(), loading = false),
                 onChannelClicked = {},
                 onNotifyWhenLiveClicked = {},
                 onSaveChannelClicked = { _, _ -> },
