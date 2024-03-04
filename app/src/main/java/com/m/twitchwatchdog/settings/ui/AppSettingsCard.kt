@@ -52,7 +52,7 @@ fun AppSettingsCardPreview() {
     TwitchWatchdogTheme {
         Surface {
             AppSettingsCard(
-                appSettings = AppSettings(0, 23),
+                appSettings = AppSettings.getDefault(),
                 onValueChanged = { _, _ -> },
                 modifier = Modifier.padding(16.dp)
             )

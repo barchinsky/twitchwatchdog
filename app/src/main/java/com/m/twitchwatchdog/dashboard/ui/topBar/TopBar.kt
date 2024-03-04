@@ -124,7 +124,7 @@ fun TopBarPreview() {
             TopBar(
                 notificationsEnabled = true,
                 settingsVisible = true,
-                appSettings = AppSettings(0, 23),
+                appSettings = AppSettings.getDefault(),
                 syncJobEnabled = true,
                 onNotificationsClick = { /*TODO*/ },
                 onSettingsClick = { /*TODO*/ },

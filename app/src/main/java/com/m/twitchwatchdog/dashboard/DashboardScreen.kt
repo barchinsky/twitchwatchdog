@@ -101,12 +101,12 @@ private fun DashboardScreenPreview() {
         Surface {
             DashboardScreen(
                 state = DashboardScreenState(channels, loading = false),
-                appSettings = AppSettings(0, 23),
+                appSettings = AppSettings.getDefault(),
                 onChannelClicked = {},
                 onNotifyWhenLiveClicked = {},
                 onSaveChannelClicked = { _, _ -> },
                 onDeleteClicked = {},
-                onNotifyRangeSettingChanged = {_, _ ->},
+                onNotifyRangeSettingChanged = { _, _ -> },
             )
         }
     }

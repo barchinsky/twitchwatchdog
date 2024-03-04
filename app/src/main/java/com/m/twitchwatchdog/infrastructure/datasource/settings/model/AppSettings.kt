@@ -6,4 +6,11 @@ import com.squareup.moshi.JsonClass
 data class AppSettings(
     val checkStartHour: Int,
     val checkEndHour: Int,
-)
+) {
+
+    companion object {
+
+        fun getDefault(): AppSettings =
+            AppSettings(0, 24)
+    }
+}

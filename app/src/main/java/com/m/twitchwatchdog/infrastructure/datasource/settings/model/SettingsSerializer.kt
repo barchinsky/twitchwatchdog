@@ -17,7 +17,7 @@ class SettingsSerializer @Inject constructor(
     @OptIn(ExperimentalStdlibApi::class)
     private val settingsAdapter = moshi.adapter<AppSettings>()
 
-    override val defaultValue = AppSettings(0, 23)
+    override val defaultValue = AppSettings.getDefault()
 
     override suspend fun readFrom(input: InputStream): AppSettings =
         try {

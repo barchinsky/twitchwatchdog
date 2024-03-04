@@ -22,7 +22,7 @@ internal class SettingsViewModelImpl @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
-            initialValue = AppSettings(0, 23)
+            initialValue = AppSettings.getDefault()
         )
 
     override fun onNotifyRangeChanged(from: Int, to: Int) {
