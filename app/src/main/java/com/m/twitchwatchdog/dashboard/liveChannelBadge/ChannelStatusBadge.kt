@@ -1,6 +1,7 @@
 package com.m.twitchwatchdog.dashboard.liveChannelBadge
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -42,7 +43,8 @@ fun ChannelStatusBadge(
             .background(backgroundColor, RoundedCornerShape(6.dp))
             .padding(vertical = 4.dp, horizontal = 6.dp)
             .then(modifier),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
     ) {
         Text(
             text = stringResource(R.string.channel_live.takeIf { isLive }
@@ -65,7 +67,8 @@ fun ChannelStatusBadge(
 fun LiveChannelBadgePreview() {
     TwitchWatchdogTheme {
         ChannelStatusBadge(
-            channel = ChannelInfo.getDefault(1, "", false)
+            channel = ChannelInfo.getDefault(1, "", false),
+            modifier = Modifier.width(200.dp)
         )
     }
 }

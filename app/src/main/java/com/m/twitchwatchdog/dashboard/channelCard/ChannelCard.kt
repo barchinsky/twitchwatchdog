@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,6 +66,7 @@ fun ChannelCard(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(0.6f)
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -77,7 +80,14 @@ fun ChannelCard(
                         .size(50.dp, 50.dp)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-                Text(channelInfo.name, fontSize = 20.sp, fontWeight = FontWeight.Medium)
+                Text(
+                    channelInfo.name,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(0.9f)
+                )
                 Spacer(modifier = Modifier.width(4.dp))
                 Image(
                     painter = painterResource(
@@ -90,7 +100,7 @@ fun ChannelCard(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
             }
-            ChannelStatusBadge(channelInfo)
+            ChannelStatusBadge(channelInfo, modifier = Modifier.weight(0.2f))
         }
 
         AnimatedVisibility(visible = channelInfo.expanded) {
@@ -110,7 +120,7 @@ fun ChannelCardPreview() {
         ChannelCard(
             channelInfo = ChannelInfo(
                 id = 1,
-                "s1mple",
+                "s1mple asdasd asdasdsad asdsad asdsad sadsad",
                 ChannelInfo.Status.LIVE,
                 "",
                 watchingNow = "32K",

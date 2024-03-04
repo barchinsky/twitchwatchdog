@@ -39,8 +39,8 @@ fun AppSettingsCard(
                         value.endInclusive.toInt()
                     )
                 },
-                steps = 23,
-                valueRange = 0f..23f,
+                steps = 24,
+                valueRange = 0f..24f,
             )
         }
     }
