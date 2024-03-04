@@ -3,7 +3,6 @@ package com.m.twitchwatchdog.dashboard
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,29 +11,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.dashboard.addChannel.AddChannelCard
 import com.m.twitchwatchdog.dashboard.channelsList.ChannelsList
 import com.m.twitchwatchdog.dashboard.loadingChannels.LoadingChannels
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.model.DashboardScreenState
 import com.m.twitchwatchdog.dashboard.noChannelsCard.NoChannelsCard
+import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
 @Composable
 fun DashboardScreen(
     state: DashboardScreenState,
+    appSettings: AppSettings,
     onChannelClicked: (ChannelInfo) -> Unit,
     onNotifyWhenLiveClicked: (ChannelInfo) -> Unit,
     onSaveChannelClicked: (String, Boolean) -> Unit,
     onDeleteClicked: (ChannelInfo) -> Unit,
+    onNotifyRangeSettingChanged: (Int, Int) -> Unit,
 ) {
 
     var isAddChannelExpanded by remember {
@@ -57,10 +52,12 @@ fun DashboardScreen(
                 else -> {
                     ChannelsList(
                         channels = state.channels,
+                        appSettings = appSettings,
                         syncJobRunning = state.syncJobRunning,
                         onChannelClicked = onChannelClicked,
                         onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
                         onDeleteClicked = onDeleteClicked,
+                        onNotifyRangeSettingChanged = onNotifyRangeSettingChanged,
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
@@ -103,11 +100,13 @@ private fun DashboardScreenPreview() {
     TwitchWatchdogTheme {
         Surface {
             DashboardScreen(
-                state = DashboardScreenState(emptyList(), loading = false),
+                state = DashboardScreenState(channels, loading = false),
+                appSettings = AppSettings(0, 23),
                 onChannelClicked = {},
                 onNotifyWhenLiveClicked = {},
                 onSaveChannelClicked = { _, _ -> },
-                onDeleteClicked = {}
+                onDeleteClicked = {},
+                onNotifyRangeSettingChanged = {_, _ ->},
             )
         }
     }

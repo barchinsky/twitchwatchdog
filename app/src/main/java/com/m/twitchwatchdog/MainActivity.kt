@@ -33,6 +33,8 @@ import androidx.lifecycle.lifecycleScope
 import com.m.twitchwatchdog.dashboard.DashboardScreen
 import com.m.twitchwatchdog.dashboard.DashboardViewModel
 import com.m.twitchwatchdog.dashboard.DashboardViewModelImpl
+import com.m.twitchwatchdog.settings.SettingsViewModel
+import com.m.twitchwatchdog.settings.SettingsViewModelImpl
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,6 +59,9 @@ class MainActivity : ComponentActivity() {
             val viewModel: DashboardViewModel by viewModels<DashboardViewModelImpl>()
             val dashboardScreenState by viewModel.state.collectAsState()
 
+            val settingsViewModel: SettingsViewModel by viewModels<SettingsViewModelImpl>()
+            val settingsState by settingsViewModel.state.collectAsState()
+
             TwitchWatchdogTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -66,10 +71,12 @@ class MainActivity : ComponentActivity() {
                 ) {
                     DashboardScreen(
                         state = dashboardScreenState,
+                        appSettings = settingsState,
                         onChannelClicked = viewModel::onChannelClicked,
                         onNotifyWhenLiveClicked = viewModel::onNotifyWhenLiveClicked,
                         onSaveChannelClicked = viewModel::onSaveChannelClicked,
                         onDeleteClicked = viewModel::onDeleteChannelClicked,
+                        onNotifyRangeSettingChanged = settingsViewModel::onNotifyRangeChanged,
                     )
                 }
             }

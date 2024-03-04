@@ -1,6 +1,5 @@
 package com.m.twitchwatchdog.infrastructure.useCase
 
-import androidx.lifecycle.Lifecycle
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.infrastructure.repository.ChannelInfoRepository
 import kotlinx.coroutines.flow.Flow
