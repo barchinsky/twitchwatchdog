@@ -47,6 +47,15 @@ fun ChannelInfoCard(
                 onCheckedChange = { onNotifyWhenLiveClicked(channelInfo) },
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = "Watching now", color = MaterialTheme.colorScheme.onPrimary)
+            Text(text = channelInfo.watchingNow, color = MaterialTheme.colorScheme.onPrimary)
+        }
     }
 }
 

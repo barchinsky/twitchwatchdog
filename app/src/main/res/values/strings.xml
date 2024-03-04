@@ -6,4 +6,5 @@
     <string name="channel_offline">Offline</string>
     <string name="channel_avatar">%1$s\'s avatar</string>
     <string name="channel_is_live_title">Channel is live!</string>
+    <string name="settings_notify_between">Notify between %1$s:00 and %2$s:00</string>
 </resources>

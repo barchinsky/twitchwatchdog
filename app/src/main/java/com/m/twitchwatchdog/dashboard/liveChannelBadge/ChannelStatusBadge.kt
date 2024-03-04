@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,15 +51,11 @@ fun ChannelStatusBadge(
             text = stringResource(R.string.channel_live.takeIf { isLive }
                                       ?: R.string.channel_offline),
             color = Color.White,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
         Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            channel.watchingNow,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.White
-        )
     }
 }
 

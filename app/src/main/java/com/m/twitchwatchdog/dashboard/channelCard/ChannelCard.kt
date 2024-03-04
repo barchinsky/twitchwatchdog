@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -66,7 +65,7 @@ fun ChannelCard(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(0.6f)
+                modifier = Modifier.weight(1f)
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -86,12 +85,13 @@ fun ChannelCard(
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(0.9f)
+                    modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Image(
                     painter = painterResource(
-                        id = R.drawable.ic_notifications_active_24.takeIf { channelInfo.notifyWhenLive }
+                        id = R.drawable.ic_notifications_active_24
+                            .takeIf { channelInfo.notifyWhenLive }
                             ?: R.drawable.ic_notifications_off_24
                     ),
                     contentDescription = "Notifications enabled",
@@ -100,7 +100,7 @@ fun ChannelCard(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
             }
-            ChannelStatusBadge(channelInfo, modifier = Modifier.weight(0.2f))
+            ChannelStatusBadge(channelInfo)
         }
 
         AnimatedVisibility(visible = channelInfo.expanded) {
@@ -120,7 +120,7 @@ fun ChannelCardPreview() {
         ChannelCard(
             channelInfo = ChannelInfo(
                 id = 1,
-                "s1mple asdasd asdasdsad asdsad asdsad sadsad",
+                "s1mplea asdasd asdsad asdsad ",
                 ChannelInfo.Status.LIVE,
                 "",
                 watchingNow = "32K",
