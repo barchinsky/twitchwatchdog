@@ -13,10 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
@@ -33,7 +31,7 @@ fun ChannelInfoCard(
             modifier = Modifier
                 .height(1.dp)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.onPrimary)
+                .background(MaterialTheme.colorScheme.secondary)
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row(
@@ -54,7 +52,10 @@ fun ChannelInfoCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(text = "Watching now", color = MaterialTheme.colorScheme.onPrimary)
-            Text(text = channelInfo.watchingNow, color = MaterialTheme.colorScheme.onPrimary)
+            Text(
+                text = channelInfo.watchingNow.takeIf { it.isNotBlank() } ?: "-",
+                color = MaterialTheme.colorScheme.onPrimary
+            )
         }
     }
 }

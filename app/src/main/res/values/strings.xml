@@ -7,4 +7,7 @@
     <string name="channel_avatar">%1$s\'s avatar</string>
     <string name="channel_is_live_title">Channel is live!</string>
     <string name="settings_notify_between">Notify between %1$s:00 and %2$s:00</string>
+    <string name="add_channel">Add channel</string>
+    <string name="save">Save</string>
+    <string name="save_channel">Save channel</string>
 </resources>

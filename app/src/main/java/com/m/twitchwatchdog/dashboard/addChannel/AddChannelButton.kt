@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,9 +22,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
 @Composable
@@ -34,7 +37,8 @@ fun AddChannelButton(
     onSaveChannelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val buttonBackgroundColor = MaterialTheme.colorScheme.primary.takeIf { enabled || !expanded }
+    val buttonBackgroundColor = MaterialTheme.colorScheme.primary
+        .takeIf { enabled || !expanded }
         ?: MaterialTheme.colorScheme.inversePrimary
 
     Card(
@@ -43,50 +47,47 @@ fun AddChannelButton(
         elevation = CardDefaults.elevatedCardElevation(),
         modifier = Modifier.then(modifier)
     ) {
-        Row(modifier = Modifier
-            .clickable {
-                if (enabled && expanded) {
-                    onSaveChannelClick()
-                } else {
-                    onAddChannelClick()
+        Row(
+            modifier = Modifier
+                .clickable {
+                    if (enabled && expanded) {
+                        onSaveChannelClick()
+                    } else {
+                        onAddChannelClick()
+                    }
                 }
-            }
-            .background(buttonBackgroundColor, RoundedCornerShape(6.dp))
-            .padding(12.dp)
-            .animateContentSize(),
+                .background(buttonBackgroundColor, RoundedCornerShape(6.dp))
+                .padding(12.dp)
+                .animateContentSize(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center) {
-            Crossfade(targetState = expanded, label = "Icon") {
-                if (it) {
-                    Icon(
-                        Icons.Filled.Done,
-                        "Save channel",
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                } else {
-                    Icon(
-                        Icons.Filled.Add, "Add channel", tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Crossfade(targetState = expanded, label = "Icon") { expanded ->
+                Icon(
+                    imageVector = Icons.Filled.Done.takeIf { expanded } ?: Icons.Filled.Add,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "Save".takeIf { expanded } ?: "Add channel",
+                text = stringResource(R.string.save.takeIf { expanded } ?: R.string.add_channel),
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }
     }
-
 }
 
 @Composable
 @PreviewLightDark
 private fun AddChannelButtonPreview() {
     TwitchWatchdogTheme {
-        AddChannelButton(expanded = false,
-                         enabled = true,
-                         onAddChannelClick = {},
-                         onSaveChannelClick = {})
+        AddChannelButton(
+            expanded = false,
+            enabled = true,
+            onAddChannelClick = {},
+            onSaveChannelClick = {}
+        )
     }
 }

@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.ui.swipeToDismiss
+package com.m.twitchwatchdog.infrastructure.ui.swipeToDismiss
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -27,7 +27,7 @@ fun SwipeToDismissBackground(
     state: DismissState,
 ) {
 
-    val color = MaterialTheme.colorScheme.error
+    val color = Color.Red
         .takeIf { state.dismissDirection == DismissDirection.EndToStart }
         ?: MaterialTheme.colorScheme.background
 

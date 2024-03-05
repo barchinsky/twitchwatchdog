@@ -51,6 +51,7 @@ import com.m.twitchwatchdog.infrastructure.ui.switchRow.SwitchRow
 import com.m.twitchwatchdog.ui.theme.DarkGreyAlpha80
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 import kotlinx.coroutines.delay
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun AddChannelCard(
@@ -82,7 +83,7 @@ fun AddChannelCard(
 
     LaunchedEffect(expanded) {
         if (expanded) {
-            delay(500)
+            delay(TimeUnit.SECONDS.toMillis(1))
             focusRequester.requestFocus()
         }
     }
