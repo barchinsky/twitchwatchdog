@@ -5,7 +5,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -27,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,6 +65,7 @@ fun ChannelCard(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -78,11 +79,19 @@ fun ChannelCard(
                         .size(50.dp, 50.dp)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-                Text(channelInfo.name, fontSize = 20.sp, fontWeight = FontWeight.Medium)
+                Text(
+                    channelInfo.name,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
                 Spacer(modifier = Modifier.width(4.dp))
                 Image(
                     painter = painterResource(
-                        id = R.drawable.ic_notifications_active_24.takeIf { channelInfo.notifyWhenLive }
+                        id = R.drawable.ic_notifications_active_24
+                            .takeIf { channelInfo.notifyWhenLive }
                             ?: R.drawable.ic_notifications_off_24
                     ),
                     contentDescription = "Notifications enabled",
@@ -91,16 +100,15 @@ fun ChannelCard(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
             }
-            ChannelStatusBadge(channelInfo.status)
+            ChannelStatusBadge(channelInfo)
         }
 
         AnimatedVisibility(visible = channelInfo.expanded) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                ChannelInfoCard(
-                    channelInfo = channelInfo,
-                    onNotifyWhenLiveClicked = onNotifyWhenLiveClicked
-                )
-            }
+            ChannelInfoCard(
+                channelInfo = channelInfo,
+                onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
+                modifier = Modifier.padding(16.dp)
+            )
         }
     }
 }
@@ -112,9 +120,10 @@ fun ChannelCardPreview() {
         ChannelCard(
             channelInfo = ChannelInfo(
                 id = 1,
-                "s1mple",
+                "s1mplea asdasd asdsad asdsad ",
                 ChannelInfo.Status.LIVE,
                 "",
+                watchingNow = "32K",
                 loading = false,
                 expanded = true,
                 notifyWhenLive = true

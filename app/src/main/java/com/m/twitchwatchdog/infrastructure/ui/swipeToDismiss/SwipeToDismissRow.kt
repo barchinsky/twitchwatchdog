@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.ui.swipeToDismiss
+package com.m.twitchwatchdog.infrastructure.ui.swipeToDismiss
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween

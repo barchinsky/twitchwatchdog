@@ -26,6 +26,14 @@ class ChannelInfoRemoteDataSource @Inject constructor() {
             ChannelInfo.Status.OFFLINE
         }
 
+        val watchingNow = if (status == ChannelInfo.Status.LIVE) {
+            val twLinkTitle = page.getElementsByClass("ZyATl").text()
+            Regex("""(\d+(\.\d+)?)K?""").find(twLinkTitle)
+                ?.groupValues
+                ?.first()
+                .orEmpty()
+        } else ""
+
         val avatarUrl = if (channelInfo.avatarUrl == null) {
             val avatarElements = page.getElementsByClass("tw-image-avatar")
 
@@ -36,6 +44,6 @@ class ChannelInfoRemoteDataSource @Inject constructor() {
             }
         } else channelInfo.avatarUrl
 
-        channelInfo.copy(status = status, avatarUrl = avatarUrl)
+        channelInfo.copy(status = status, avatarUrl = avatarUrl, watchingNow = watchingNow)
     }
 }

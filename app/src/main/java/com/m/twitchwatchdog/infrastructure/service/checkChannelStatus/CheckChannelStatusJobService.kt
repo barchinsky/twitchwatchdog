@@ -6,17 +6,21 @@ import android.app.job.JobParameters
 import android.app.job.JobService
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Icon
 import androidx.core.app.NotificationCompat
 import com.m.twitchwatchdog.MainActivity
 import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.infrastructure.useCase.FetchChannelInfoUseCase
+import com.m.twitchwatchdog.infrastructure.useCase.GetChannelsFlowUseCase
 import com.m.twitchwatchdog.infrastructure.useCase.ShouldCheckChannelStatusUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,34 +35,40 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
     lateinit var fetchChannelInfoUseCase: FetchChannelInfoUseCase
 
     @Inject
+    lateinit var getChannelsFlowUseCase: GetChannelsFlowUseCase
+
+    @Inject
     lateinit var shouldCheckChannelStatusUseCase: ShouldCheckChannelStatusUseCase
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun onStartJob(params: JobParameters?): Boolean {
-        println("Should check status: ${shouldCheckChannelStatusUseCase.execute()}")
-        if (!shouldCheckChannelStatusUseCase.execute()) {
-            jobFinished(params, false)
-            return true
-        }
-
         coroutineScope.launch {
             println("Fetching channel info...")
-            runCatching {
-                val channelInfo = fetchChannelInfoUseCase.execute()
-
-                val liveChannels =
-                    channelInfo.filter { it.notifyWhenLive && it.status == ChannelInfo.Status.LIVE }
-
-                if (liveChannels.isNotEmpty()) {
-                    val liveChannelNames = liveChannels.joinToString(",") { it.name }
-                    showNotificationIfNeeded(context.getString(R.string.channels_online, liveChannelNames))
-                }
-            }.onFailure {
-                println("Failed to complete fetching job!. $it")
+            if (!shouldCheckChannelStatusUseCase.execute()) {
+                jobFinished(params, false)
+                return@launch
             }
 
-            jobFinished(params, false)
+            runCatching { fetchChannelInfoUseCase.execute() }
+                .onFailure { println("Failed to complete fetching job!. $it") }
+
+            getChannelsFlowUseCase.execute()
+                .onEach { channelInfo ->
+                    val liveChannels =
+                        channelInfo.filter { it.notifyWhenLive && it.status == ChannelInfo.Status.LIVE }
+
+                    if (liveChannels.isNotEmpty()) {
+                        val liveChannelNames = liveChannels.joinToString(",") { it.name }
+                        showNotificationIfNeeded(
+                            context.getString(
+                                R.string.channels_online,
+                                liveChannelNames
+                            )
+                        )
+                    }
+                }
+                .launchIn(coroutineScope)
         }
 
         return true
@@ -83,10 +93,12 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
                 context,
                 context.getString(R.string.default_notification_channel_id)
             )
+            .setContentTitle(getString(R.string.channel_is_live_title))
             .setContentText(content)
             .setContentIntent(getContentIntent())
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setSmallIcon(R.mipmap.ic_launcher_foreground)
+            .setLargeIcon(Icon.createWithResource(context, R.drawable.splash_background))
             .setOnlyAlertOnce(true)
             .setAutoCancel(true)
             .build()

@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">TwitchWatchdog</string>
     <string name="default_notification_channel_id">twitch_watchdog_alert</string>
-    <string name="channels_online">Your favorite channels are Live! (%s)</string>
+    <string name="channels_online">Your favorite channels are live! (%s)</string>
     <string name="channel_live">Live</string>
     <string name="channel_offline">Offline</string>
     <string name="channel_avatar">%1$s\'s avatar</string>
+    <string name="channel_is_live_title">Channel is live!</string>
+    <string name="settings_notify_between">Notify between %1$s:00 and %2$s:00</string>
+    <string name="add_channel">Add channel</string>
+    <string name="save">Save</string>
+    <string name="save_channel">Save channel</string>
 </resources>

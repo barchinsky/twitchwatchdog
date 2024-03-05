@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -32,7 +31,7 @@ fun ChannelInfoCard(
             modifier = Modifier
                 .height(1.dp)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.onPrimary)
+                .background(MaterialTheme.colorScheme.secondary)
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row(
@@ -46,14 +45,17 @@ fun ChannelInfoCard(
                 onCheckedChange = { onNotifyWhenLiveClicked(channelInfo) },
             )
         }
-        Spacer(modifier = Modifier.heightIn(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "Live since", color = MaterialTheme.colorScheme.onPrimary)
-            Text(text = "2h", color = MaterialTheme.colorScheme.onPrimary)
+            Text(text = "Watching now", color = MaterialTheme.colorScheme.onPrimary)
+            Text(
+                text = channelInfo.watchingNow.takeIf { it.isNotBlank() } ?: "-",
+                color = MaterialTheme.colorScheme.onPrimary
+            )
         }
     }
 }
@@ -66,7 +68,7 @@ fun ChannelInfoPreview() {
             channelInfo = ChannelInfo.getDefault(
                 1,
                 "PGL",
-                true
+                true,
             ),
             onNotifyWhenLiveClicked = {}
         )

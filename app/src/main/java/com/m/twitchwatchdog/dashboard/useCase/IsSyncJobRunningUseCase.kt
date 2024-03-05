@@ -13,5 +13,4 @@ internal class IsSyncJobRunningUseCase @Inject constructor(
 
     fun execute(): Boolean =
         jobScheduler.getPendingJob(EnableChannelAlertUseCase.JOB_ID_ENABLE_ALERT.hashCode()) != null
-
 }
