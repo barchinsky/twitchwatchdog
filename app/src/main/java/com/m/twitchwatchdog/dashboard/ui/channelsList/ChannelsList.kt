@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.dashboard.channelsList
+package com.m.twitchwatchdog.dashboard.ui.channelsList
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.m.twitchwatchdog.dashboard.channelCard.ChannelCard
+import com.m.twitchwatchdog.dashboard.ui.channelCard.ChannelCard
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.ui.topBar.TopBar
 import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings

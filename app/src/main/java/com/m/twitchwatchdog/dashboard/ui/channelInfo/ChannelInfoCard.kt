@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.dashboard.channelInfo
+package com.m.twitchwatchdog.dashboard.ui.channelInfo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

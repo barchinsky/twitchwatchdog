@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.dashboard.addChannel
+package com.m.twitchwatchdog.dashboard.ui.addChannel
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState

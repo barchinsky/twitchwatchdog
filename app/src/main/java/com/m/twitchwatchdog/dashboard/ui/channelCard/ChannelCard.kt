@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.dashboard.channelCard
+package com.m.twitchwatchdog.dashboard.ui.channelCard
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.m.twitchwatchdog.R
-import com.m.twitchwatchdog.dashboard.channelInfo.ChannelInfoCard
-import com.m.twitchwatchdog.dashboard.liveChannelBadge.ChannelStatusBadge
+import com.m.twitchwatchdog.dashboard.ui.channelInfo.ChannelInfoCard
+import com.m.twitchwatchdog.dashboard.ui.liveChannelBadge.ChannelStatusBadge
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 

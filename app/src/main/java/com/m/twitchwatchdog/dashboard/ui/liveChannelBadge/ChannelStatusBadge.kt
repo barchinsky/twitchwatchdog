@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.dashboard.liveChannelBadge
+package com.m.twitchwatchdog.dashboard.ui.liveChannelBadge
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
