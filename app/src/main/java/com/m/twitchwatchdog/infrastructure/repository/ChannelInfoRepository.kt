@@ -28,6 +28,7 @@ class ChannelInfoRepository @Inject constructor(
                     runCatching {
                         val remoteChannel =
                             channelInfoRemoteDataSource.fetchChannelInfo(storedChannelInfo)
+
                         storedChannelInfo.copy(
                             status = remoteChannel.status,
                             avatarUrl = remoteChannel.avatarUrl,
@@ -38,7 +39,7 @@ class ChannelInfoRepository @Inject constructor(
             }
             .map { it.await() }
 
-       set(channels)
+        set(channels)
     }
 
     suspend fun set(channels: List<ChannelInfo>) {

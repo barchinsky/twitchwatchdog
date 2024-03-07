@@ -38,12 +38,13 @@ class ChannelInfoLocalDataSource @Inject constructor(
         }
     }
 
-    suspend fun saveChannels(channelInfo: List<ChannelInfo>): List<ChannelInfo> = withContext(Dispatchers.IO) {
-        channelsCache.clear()
-        channelsCache.addAll(channelInfo)
-        dumpChannels()
-        channelsCache.toList()
-    }
+    suspend fun saveChannels(channelInfo: List<ChannelInfo>): List<ChannelInfo> =
+        withContext(Dispatchers.IO) {
+            channelsCache.clear()
+            channelsCache.addAll(channelInfo)
+            dumpChannels()
+            channelsCache.toList()
+        }
 
     suspend fun addChannel(channelInfo: ChannelInfo): List<ChannelInfo> =
         withContext(Dispatchers.IO) {
@@ -69,9 +70,9 @@ class ChannelInfoLocalDataSource @Inject constructor(
 
     suspend fun deleteChannel(channelInfo: ChannelInfo): List<ChannelInfo> =
         withContext(Dispatchers.IO) {
-            channelsCache
-                .filter { it.id != channelInfo.id }
-                .also { saveChannels(it) }
+            channelsCache -= channelInfo
+            dumpChannels()
+            channelsCache.toList()
         }
 
     private suspend fun dumpChannels() = withContext(Dispatchers.IO) {
