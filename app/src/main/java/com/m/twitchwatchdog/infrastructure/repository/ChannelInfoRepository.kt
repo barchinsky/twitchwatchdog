@@ -16,7 +16,7 @@ class ChannelInfoRepository @Inject constructor(
     private val channelInfoLocalDataSource: ChannelInfoLocalDataSource,
 ) {
 
-    private val channelsFlow = MutableSharedFlow<List<ChannelInfo>>()
+    private val channelsFlow = MutableSharedFlow<List<ChannelInfo>>(replay = 1)
 
     fun getChannelsFlow(): Flow<List<ChannelInfo>> =
         channelsFlow
@@ -28,6 +28,7 @@ class ChannelInfoRepository @Inject constructor(
                     runCatching {
                         val remoteChannel =
                             channelInfoRemoteDataSource.fetchChannelInfo(storedChannelInfo)
+
                         storedChannelInfo.copy(
                             status = remoteChannel.status,
                             avatarUrl = remoteChannel.avatarUrl,
@@ -38,8 +39,7 @@ class ChannelInfoRepository @Inject constructor(
             }
             .map { it.await() }
 
-        channelInfoLocalDataSource.saveChannels(channels)
-        channelsFlow.emit(channels)
+        set(channels)
     }
 
     suspend fun set(channels: List<ChannelInfo>) {

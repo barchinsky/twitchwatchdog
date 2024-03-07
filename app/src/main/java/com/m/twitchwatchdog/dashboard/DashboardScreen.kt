@@ -8,16 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import com.m.twitchwatchdog.dashboard.addChannel.AddChannelCard
-import com.m.twitchwatchdog.dashboard.channelsList.ChannelsList
-import com.m.twitchwatchdog.dashboard.loadingChannels.LoadingChannels
+import com.m.twitchwatchdog.dashboard.ui.addChannel.AddChannelCard
+import com.m.twitchwatchdog.dashboard.ui.channelsList.ChannelsList
+import com.m.twitchwatchdog.dashboard.ui.loadingChannels.LoadingChannels
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.model.DashboardScreenState
-import com.m.twitchwatchdog.dashboard.noChannelsCard.NoChannelsCard
+import com.m.twitchwatchdog.dashboard.ui.noChannelsCard.NoChannelsCard
 import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
@@ -32,7 +33,7 @@ fun DashboardScreen(
     onNotifyRangeSettingChanged: (Int, Int) -> Unit,
 ) {
 
-    var isAddChannelExpanded by remember {
+    var isAddChannelExpanded by rememberSaveable {
         mutableStateOf(false)
     }
 

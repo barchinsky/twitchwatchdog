@@ -10,4 +10,5 @@
     <string name="add_channel">Add channel</string>
     <string name="save">Save</string>
     <string name="save_channel">Save channel</string>
+    <string name="no_channels">No channels added yet!\n Add the first one!</string>
 </resources>

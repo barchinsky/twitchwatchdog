@@ -79,10 +79,6 @@ internal class DashboardViewModelImpl @Inject constructor(
 
             runCatching {
                 addChannelUseCase.execute(channelInfo)
-
-                if (channelInfo.notifyWhenLive) {
-                    enableChannelAlertUseCase.execute()
-                }
             }.onFailure {
                 println("Failed to add channel: $it")
             }

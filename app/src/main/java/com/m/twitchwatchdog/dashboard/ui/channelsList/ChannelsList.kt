@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.dashboard.channelsList
+package com.m.twitchwatchdog.dashboard.ui.channelsList
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -13,10 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.m.twitchwatchdog.dashboard.channelCard.ChannelCard
+import com.m.twitchwatchdog.dashboard.ui.channelCard.ChannelCard
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.ui.topBar.TopBar
 import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings
@@ -35,7 +36,7 @@ fun ChannelsList(
     onNotifyRangeSettingChanged: (Int, Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var settingsExpanded by remember {
+    var settingsExpanded by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -59,6 +60,7 @@ fun ChannelsList(
             ) {
                 SwipeToDismissRow(
                     item = channels[it],
+                    dismissTarget = channels[it].name,
                     onDismissed = onDeleteClicked,
                 ) { channelInfo ->
                     ChannelCard(

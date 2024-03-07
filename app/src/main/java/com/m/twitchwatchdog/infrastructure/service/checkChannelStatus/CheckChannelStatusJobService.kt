@@ -45,30 +45,31 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
     override fun onStartJob(params: JobParameters?): Boolean {
         coroutineScope.launch {
             println("Fetching channel info...")
-            if (!shouldCheckChannelStatusUseCase.execute()) {
-                jobFinished(params, false)
-                return@launch
-            }
+            if (shouldCheckChannelStatusUseCase.execute()) {
+                runCatching { fetchChannelInfoUseCase.execute() }
+                    .onFailure { println("Failed to complete fetching job!. $it") }
 
-            runCatching { fetchChannelInfoUseCase.execute() }
-                .onFailure { println("Failed to complete fetching job!. $it") }
+                getChannelsFlowUseCase.execute()
+                    .onEach { channelInfo ->
+                        val liveChannels =
+                            channelInfo.filter { it.notifyWhenLive && it.status == ChannelInfo.Status.LIVE }
 
-            getChannelsFlowUseCase.execute()
-                .onEach { channelInfo ->
-                    val liveChannels =
-                        channelInfo.filter { it.notifyWhenLive && it.status == ChannelInfo.Status.LIVE }
-
-                    if (liveChannels.isNotEmpty()) {
-                        val liveChannelNames = liveChannels.joinToString(",") { it.name }
-                        showNotificationIfNeeded(
-                            context.getString(
-                                R.string.channels_online,
-                                liveChannelNames
+                        if (liveChannels.isNotEmpty()) {
+                            val liveChannelNames = liveChannels.joinToString(",") { it.name }
+                            showNotificationIfNeeded(
+                                context.getString(
+                                    R.string.channels_online,
+                                    liveChannelNames
+                                )
                             )
-                        )
+                        }
+
+                        jobFinished(params, false)
                     }
-                }
-                .launchIn(coroutineScope)
+                    .launchIn(coroutineScope)
+            } else {
+                jobFinished(params, false)
+            }
         }
 
         return true
@@ -96,7 +97,7 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
             .setContentTitle(getString(R.string.channel_is_live_title))
             .setContentText(content)
             .setContentIntent(getContentIntent())
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSmallIcon(R.mipmap.ic_launcher_foreground)
             .setLargeIcon(Icon.createWithResource(context, R.drawable.splash_background))
             .setOnlyAlertOnce(true)

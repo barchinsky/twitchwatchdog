@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.dashboard.addChannel
+package com.m.twitchwatchdog.dashboard.ui.addChannel
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -36,6 +36,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
@@ -65,8 +66,8 @@ fun AddChannelCard(
     val focusRequester = remember { FocusRequester() }
     val softKeyboardController = LocalSoftwareKeyboardController.current
 
-    var channelName by remember { mutableStateOf("") }
-    var shouldNotify by remember { mutableStateOf(false) }
+    var channelName by rememberSaveable { mutableStateOf("") }
+    var shouldNotify by rememberSaveable { mutableStateOf(false) }
     val isSaveEnabled by remember { derivedStateOf { channelName.isNotBlank() } }
 
     val animatedBackgroundColor by animateColorAsState(
