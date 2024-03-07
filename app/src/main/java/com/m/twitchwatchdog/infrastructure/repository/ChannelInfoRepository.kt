@@ -16,7 +16,7 @@ class ChannelInfoRepository @Inject constructor(
     private val channelInfoLocalDataSource: ChannelInfoLocalDataSource,
 ) {
 
-    private val channelsFlow = MutableSharedFlow<List<ChannelInfo>>()
+    private val channelsFlow = MutableSharedFlow<List<ChannelInfo>>(replay = 1)
 
     fun getChannelsFlow(): Flow<List<ChannelInfo>> =
         channelsFlow
