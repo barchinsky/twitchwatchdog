@@ -59,6 +59,7 @@ fun ChannelsList(
             ) {
                 SwipeToDismissRow(
                     item = channels[it],
+                    dismissTarget = channels[it].name,
                     onDismissed = onDeleteClicked,
                 ) { channelInfo ->
                     ChannelCard(

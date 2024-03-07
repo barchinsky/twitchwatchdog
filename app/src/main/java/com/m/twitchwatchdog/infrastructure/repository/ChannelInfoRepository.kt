@@ -38,8 +38,7 @@ class ChannelInfoRepository @Inject constructor(
             }
             .map { it.await() }
 
-        channelInfoLocalDataSource.saveChannels(channels)
-        channelsFlow.emit(channels)
+       set(channels)
     }
 
     suspend fun set(channels: List<ChannelInfo>) {
