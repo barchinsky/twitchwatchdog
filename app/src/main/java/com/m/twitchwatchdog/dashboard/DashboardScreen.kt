@@ -1,23 +1,21 @@
 package com.m.twitchwatchdog.dashboard
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import com.m.twitchwatchdog.dashboard.model.ChannelInfo
+import com.m.twitchwatchdog.dashboard.model.DashboardScreenState
 import com.m.twitchwatchdog.dashboard.ui.addChannel.AddChannelCard
 import com.m.twitchwatchdog.dashboard.ui.channelsList.ChannelsList
 import com.m.twitchwatchdog.dashboard.ui.loadingChannels.LoadingChannels
-import com.m.twitchwatchdog.dashboard.model.ChannelInfo
-import com.m.twitchwatchdog.dashboard.model.DashboardScreenState
 import com.m.twitchwatchdog.dashboard.ui.noChannelsCard.NoChannelsCard
 import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
@@ -31,6 +29,7 @@ fun DashboardScreen(
     onSaveChannelClicked: (String, Boolean) -> Unit,
     onDeleteClicked: (ChannelInfo) -> Unit,
     onNotifyRangeSettingChanged: (Int, Int) -> Unit,
+    onSwipeToRefresh: () -> Unit,
 ) {
 
     var isAddChannelExpanded by rememberSaveable {
@@ -40,28 +39,25 @@ fun DashboardScreen(
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
-        Crossfade(
-            targetState = state.loading,
-            label = "Loading content",
-            modifier = Modifier.align(Alignment.Center)
-        ) { loading ->
-            when {
-                loading -> LoadingChannels(modifier = Modifier.align(Alignment.Center))
 
-                state.channels.isEmpty() -> NoChannelsCard()
+        when {
+            state.loading -> LoadingChannels(modifier = Modifier.align(Alignment.Center))
 
-                else -> {
-                    ChannelsList(
-                        channels = state.channels,
-                        appSettings = appSettings,
-                        syncJobRunning = state.syncJobRunning,
-                        onChannelClicked = onChannelClicked,
-                        onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
-                        onDeleteClicked = onDeleteClicked,
-                        onNotifyRangeSettingChanged = onNotifyRangeSettingChanged,
-                        modifier = Modifier.fillMaxSize(),
-                    )
-                }
+            state.channels.isEmpty() -> NoChannelsCard()
+
+            else -> {
+                ChannelsList(
+                    channels = state.channels,
+                    appSettings = appSettings,
+                    syncJobRunning = state.syncJobRunning,
+                    refreshing = state.refreshing,
+                    onChannelClicked = onChannelClicked,
+                    onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
+                    onDeleteClicked = onDeleteClicked,
+                    onNotifyRangeSettingChanged = onNotifyRangeSettingChanged,
+                    onSwipeToRefresh = onSwipeToRefresh,
+                    modifier = Modifier.fillMaxSize(),
+                )
             }
         }
 
@@ -70,8 +66,7 @@ fun DashboardScreen(
             onAddChannelClicked = { isAddChannelExpanded = true },
             onSaveChannelClicked = onSaveChannelClicked,
             onCloseClicked = { isAddChannelExpanded = false },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
+            modifier = Modifier.align(Alignment.BottomEnd)
         )
     }
 }
@@ -101,13 +96,14 @@ private fun DashboardScreenPreview() {
     TwitchWatchdogTheme {
         Surface {
             DashboardScreen(
-                state = DashboardScreenState(channels, loading = false),
+                state = DashboardScreenState(channels, loading = true),
                 appSettings = AppSettings.getDefault(),
                 onChannelClicked = {},
                 onNotifyWhenLiveClicked = {},
                 onSaveChannelClicked = { _, _ -> },
                 onDeleteClicked = {},
                 onNotifyRangeSettingChanged = { _, _ -> },
+                onSwipeToRefresh = {}
             )
         }
     }
