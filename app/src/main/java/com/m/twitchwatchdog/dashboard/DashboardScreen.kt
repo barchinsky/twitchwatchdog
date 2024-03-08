@@ -43,7 +43,7 @@ fun DashboardScreen(
         when {
             state.loading -> LoadingChannels(modifier = Modifier.align(Alignment.Center))
 
-            state.channels.isEmpty() -> NoChannelsCard()
+            state.channels.isEmpty() -> NoChannelsCard(modifier = Modifier.align(Alignment.Center))
 
             else -> {
                 ChannelsList(
