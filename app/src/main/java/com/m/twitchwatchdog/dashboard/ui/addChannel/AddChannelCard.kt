@@ -54,6 +54,8 @@ import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
 
+private val expandedModifier = Modifier.fillMaxSize()
+
 @Composable
 fun AddChannelCard(
     expanded: Boolean,
@@ -89,9 +91,10 @@ fun AddChannelCard(
         }
     }
 
+    val initModifier = expandedModifier.takeIf { expanded } ?: Modifier
+
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = initModifier
             .background(animatedBackgroundColor)
             .imePadding()
             .then(modifier),
