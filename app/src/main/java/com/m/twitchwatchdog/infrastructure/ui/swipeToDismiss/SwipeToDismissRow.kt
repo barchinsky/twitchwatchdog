@@ -9,12 +9,12 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SwipeToDismiss
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private val vibrationEffect = VibrationEffect.createOneShot(100L, 70)
@@ -42,24 +43,31 @@ fun <T> SwipeToDismissRow(
     var isRemoved by remember {
         mutableStateOf(false)
     }
-    val dismissState = rememberDismissState(
+    val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = {
-            if (it == DismissValue.DismissedToStart) {
+            if (it == SwipeToDismissBoxValue.EndToStart) {
                 isRemoved = true
                 vibrator.vibrate(vibrationEffect)
-                true
-            } else {
-                false
             }
+            true
         }
     )
 
-    // Reset swipe to dismiss state in case dismiss has not been finished
-    // But composable has been destroyed (due to scroll)
-    LaunchedEffect(key1 = isRemoved) {
-        if (!isRemoved) {
+    if (isRemoved) {
+        LaunchedEffect(Unit) {
             coroutineScope.launch {
+                delay(500)
                 dismissState.reset()
+            }
+        }
+    }
+
+    // Confirm dismiss for item when it was requested but has not finished
+    // And composable has been destroyed (due to scroll)
+    DisposableEffect(key1 = Unit) {
+        onDispose {
+            if (isRemoved) {
+                onDismissed(item)
             }
         }
     }
@@ -75,11 +83,11 @@ fun <T> SwipeToDismissRow(
             expandFrom = Alignment.Top
         ) + fadeIn()
     ) {
-        SwipeToDismiss(
+        SwipeToDismissBox(
             state = dismissState,
-            background = { SwipeToDismissBackground(state = dismissState) },
-            dismissContent = { content(item) },
-            directions = setOf(DismissDirection.EndToStart)
+            backgroundContent = { SwipeToDismissBackground(state = dismissState) },
+            enableDismissFromStartToEnd = false,
+            content = { content(item) }
         )
     }
 
@@ -88,6 +96,11 @@ fun <T> SwipeToDismissRow(
             dismissTarget = dismissTarget,
             onUndoClicked = {
                 isRemoved = false
-            }, onDismissConfirmed = { onDismissed(item) })
+                coroutineScope.launch {
+                    dismissState.reset()
+                }
+            },
+            onDismissConfirmed = { onDismissed(item) }
+        )
     }
 }
