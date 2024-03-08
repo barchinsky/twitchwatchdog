@@ -38,6 +38,7 @@ class ChannelInfoRepository @Inject constructor(
                 }
             }
             .map { it.await() }
+            .sortedBy { it.status }
 
         set(channels)
     }

@@ -56,7 +56,7 @@ android {
 }
 
 dependencies {
-    val composeBomVersion = "2024.01.00"
+    val composeBomVersion = "2024.02.02"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

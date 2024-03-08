@@ -15,4 +15,6 @@ interface DashboardViewModel {
     fun onNotifyWhenLiveClicked(channelInfo: ChannelInfo)
 
     fun onDeleteChannelClicked(channelInfo: ChannelInfo)
+
+    fun onSwipeToRefresh()
 }

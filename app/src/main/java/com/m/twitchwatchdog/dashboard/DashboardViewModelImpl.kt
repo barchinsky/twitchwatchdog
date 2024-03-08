@@ -96,4 +96,18 @@ internal class DashboardViewModelImpl @Inject constructor(
             deleteChannelUseCase.execute(channelInfo)
         }
     }
+
+    override fun onSwipeToRefresh() {
+        viewModelScope.launch {
+            state.update { it.copy(refreshing = true) }
+
+            try {
+                fetchChannelInfoUseCase.execute()
+            } catch (t: Throwable) {
+                println("Failed to refresh channels: $t")
+            } finally {
+                state.update { it.copy(refreshing = false) }
+            }
+        }
+    }
 }

@@ -31,6 +31,7 @@ fun DashboardScreen(
     onSaveChannelClicked: (String, Boolean) -> Unit,
     onDeleteClicked: (ChannelInfo) -> Unit,
     onNotifyRangeSettingChanged: (Int, Int) -> Unit,
+    onSwipeToRefresh: () -> Unit,
 ) {
 
     var isAddChannelExpanded by rememberSaveable {
@@ -55,10 +56,12 @@ fun DashboardScreen(
                         channels = state.channels,
                         appSettings = appSettings,
                         syncJobRunning = state.syncJobRunning,
+                        refreshing = state.refreshing,
                         onChannelClicked = onChannelClicked,
                         onNotifyWhenLiveClicked = onNotifyWhenLiveClicked,
                         onDeleteClicked = onDeleteClicked,
                         onNotifyRangeSettingChanged = onNotifyRangeSettingChanged,
+                        onSwipeToRefresh = onSwipeToRefresh,
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
@@ -108,6 +111,7 @@ private fun DashboardScreenPreview() {
                 onSaveChannelClicked = { _, _ -> },
                 onDeleteClicked = {},
                 onNotifyRangeSettingChanged = { _, _ -> },
+                onSwipeToRefresh = {}
             )
         }
     }
