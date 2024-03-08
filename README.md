@@ -10,11 +10,7 @@ services.
 
 ## Screenshots
 
-<img src="screenshots/splash.png"  style="width:150px;">
-<img src="screenshots/dashboard.png" style="width:150px;">
-<img src="screenshots/add.png" style="width:150px;">
-<img src="screenshots/delete.png" style="width:150px;">
-<img src="screenshots/no_channels.png" style="width:150px;">
+<img src="screenshots/demo.png">
 
 ## Table of Contents
 
