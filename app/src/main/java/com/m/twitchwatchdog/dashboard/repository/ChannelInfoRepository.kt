@@ -1,8 +1,8 @@
 package com.m.twitchwatchdog.dashboard.repository
 
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
-import com.m.twitchwatchdog.infrastructure.datasource.ChannelInfoLocalDataSource
-import com.m.twitchwatchdog.infrastructure.datasource.ChannelInfoRemoteDataSource
+import com.m.twitchwatchdog.dashboard.datasource.ChannelInfoLocalDataSource
+import com.m.twitchwatchdog.dashboard.datasource.ChannelInfoRemoteDataSource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +11,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ChannelInfoRepository @Inject constructor(
+internal class ChannelInfoRepository @Inject constructor(
     private val channelInfoRemoteDataSource: ChannelInfoRemoteDataSource,
     private val channelInfoLocalDataSource: ChannelInfoLocalDataSource,
 ) {

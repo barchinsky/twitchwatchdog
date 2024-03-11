@@ -1,8 +1,8 @@
-package com.m.twitchwatchdog.dashboard.useCase
+package com.m.twitchwatchdog.dashboard.usecase
 
 import android.app.job.JobScheduler
 import android.content.Context
-import com.m.twitchwatchdog.dashboard.useCase.EnableChannelAlertUseCase.Companion.JOB_ID_ENABLE_ALERT
+import com.m.twitchwatchdog.dashboard.usecase.EnableChannelAlertUseCase.Companion.JOB_ID_ENABLE_ALERT
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

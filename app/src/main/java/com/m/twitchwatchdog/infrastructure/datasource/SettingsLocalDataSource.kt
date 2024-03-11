@@ -1,6 +1,6 @@
-package com.m.twitchwatchdog.infrastructure.datasource.settings
+package com.m.twitchwatchdog.infrastructure.datasource
 
-import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings
+import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsLocalDataSource {

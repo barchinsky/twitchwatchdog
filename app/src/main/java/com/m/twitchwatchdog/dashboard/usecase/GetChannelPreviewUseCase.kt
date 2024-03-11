@@ -1,7 +1,7 @@
-package com.m.twitchwatchdog.dashboard.useCase
+package com.m.twitchwatchdog.dashboard.usecase
 
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
-import com.m.twitchwatchdog.infrastructure.datasource.ChannelInfoRemoteDataSource
+import com.m.twitchwatchdog.dashboard.datasource.ChannelInfoRemoteDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

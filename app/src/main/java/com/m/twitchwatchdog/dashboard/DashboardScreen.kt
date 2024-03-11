@@ -17,11 +17,11 @@ import com.m.twitchwatchdog.dashboard.ui.addChannel.AddChannelCard
 import com.m.twitchwatchdog.dashboard.ui.channelsList.ChannelsList
 import com.m.twitchwatchdog.dashboard.ui.loadingChannels.LoadingChannels
 import com.m.twitchwatchdog.dashboard.ui.noChannelsCard.NoChannelsCard
-import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings
+import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
 @Composable
-fun DashboardScreen(
+internal fun DashboardScreen(
     state: DashboardScreenState,
     appSettings: AppSettings,
     onChannelClicked: (ChannelInfo) -> Unit,

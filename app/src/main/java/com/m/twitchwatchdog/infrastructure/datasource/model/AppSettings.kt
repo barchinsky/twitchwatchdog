@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.infrastructure.datasource.settings.model
+package com.m.twitchwatchdog.infrastructure.datasource.model
 
 import com.squareup.moshi.JsonClass
 

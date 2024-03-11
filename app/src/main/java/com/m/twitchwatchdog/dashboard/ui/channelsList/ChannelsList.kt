@@ -24,10 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
-import com.m.twitchwatchdog.dashboard.ui.channelCard.ChannelCard
 import com.m.twitchwatchdog.dashboard.ui.expandableChannelCard.ExpandableChannelCard
 import com.m.twitchwatchdog.dashboard.ui.topBar.TopBar
-import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings
+import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
 import com.m.twitchwatchdog.infrastructure.ui.swipeToDismiss.SwipeToDismissRow
 
 private val ListFABInsets = 50.dp

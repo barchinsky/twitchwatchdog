@@ -2,15 +2,14 @@ package com.m.twitchwatchdog.infrastracture.repository
 
 import com.google.common.truth.Truth
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
-import com.m.twitchwatchdog.infrastructure.datasource.ChannelInfoLocalDataSource
-import com.m.twitchwatchdog.infrastructure.datasource.ChannelInfoRemoteDataSource
+import com.m.twitchwatchdog.dashboard.datasource.ChannelInfoLocalDataSource
+import com.m.twitchwatchdog.dashboard.datasource.ChannelInfoRemoteDataSource
 import com.m.twitchwatchdog.dashboard.repository.ChannelInfoRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

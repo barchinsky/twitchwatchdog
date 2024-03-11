@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.infrastructure.datasource
+package com.m.twitchwatchdog.dashboard.datasource
 
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import kotlinx.coroutines.Dispatchers

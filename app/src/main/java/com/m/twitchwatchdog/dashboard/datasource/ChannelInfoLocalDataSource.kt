@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.infrastructure.datasource
+package com.m.twitchwatchdog.dashboard.datasource
 
 import android.content.SharedPreferences
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo

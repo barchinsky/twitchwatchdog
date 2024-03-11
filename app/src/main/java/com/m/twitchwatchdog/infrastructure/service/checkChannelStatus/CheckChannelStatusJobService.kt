@@ -11,9 +11,9 @@ import androidx.core.app.NotificationCompat
 import com.m.twitchwatchdog.MainActivity
 import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
-import com.m.twitchwatchdog.infrastructure.useCase.FetchChannelInfoUseCase
-import com.m.twitchwatchdog.infrastructure.useCase.GetChannelsFlowUseCase
-import com.m.twitchwatchdog.infrastructure.useCase.ShouldCheckChannelStatusUseCase
+import com.m.twitchwatchdog.dashboard.usecase.FetchChannelInfoUseCase
+import com.m.twitchwatchdog.dashboard.usecase.GetChannelsFlowUseCase
+import com.m.twitchwatchdog.infrastructure.usecase.ShouldCheckChannelStatusUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
