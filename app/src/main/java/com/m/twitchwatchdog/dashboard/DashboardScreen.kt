@@ -30,6 +30,7 @@ fun DashboardScreen(
     onDeleteClicked: (ChannelInfo) -> Unit,
     onNotifyRangeSettingChanged: (Int, Int) -> Unit,
     onSwipeToRefresh: () -> Unit,
+    onRequestChannelPreview: (String) -> Unit,
 ) {
 
     var isAddChannelExpanded by rememberSaveable {
@@ -63,10 +64,12 @@ fun DashboardScreen(
 
         AddChannelCard(
             expanded = isAddChannelExpanded,
+            channelPreview = state.channelPreview,
             onAddChannelClicked = { isAddChannelExpanded = true },
             onSaveChannelClicked = onSaveChannelClicked,
             onCloseClicked = { isAddChannelExpanded = false },
-            modifier = Modifier.align(Alignment.BottomEnd)
+            modifier = Modifier.align(Alignment.BottomEnd),
+            onRequestPreview = onRequestChannelPreview,
         )
     }
 }
@@ -103,7 +106,8 @@ private fun DashboardScreenPreview() {
                 onSaveChannelClicked = { _, _ -> },
                 onDeleteClicked = {},
                 onNotifyRangeSettingChanged = { _, _ -> },
-                onSwipeToRefresh = {}
+                onSwipeToRefresh = {},
+                onRequestChannelPreview = {}
             )
         }
     }

@@ -4,7 +4,7 @@ import com.google.common.truth.Truth
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.infrastructure.datasource.ChannelInfoLocalDataSource
 import com.m.twitchwatchdog.infrastructure.datasource.ChannelInfoRemoteDataSource
-import com.m.twitchwatchdog.infrastructure.repository.ChannelInfoRepository
+import com.m.twitchwatchdog.dashboard.repository.ChannelInfoRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.InjectMockKs

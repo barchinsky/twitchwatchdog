@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.infrastructure.repository
+package com.m.twitchwatchdog.dashboard.repository
 
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.infrastructure.datasource.ChannelInfoLocalDataSource

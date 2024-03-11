@@ -17,4 +17,6 @@ interface DashboardViewModel {
     fun onDeleteChannelClicked(channelInfo: ChannelInfo)
 
     fun onSwipeToRefresh()
+
+    fun onRequestPreview(channelName: String)
 }

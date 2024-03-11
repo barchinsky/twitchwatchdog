@@ -8,6 +8,7 @@ import com.m.twitchwatchdog.dashboard.useCase.AddChannelUseCase
 import com.m.twitchwatchdog.dashboard.useCase.DeleteChannelUseCase
 import com.m.twitchwatchdog.dashboard.useCase.DisableChannelAlertUseCase
 import com.m.twitchwatchdog.dashboard.useCase.EnableChannelAlertUseCase
+import com.m.twitchwatchdog.dashboard.useCase.GetChannelPreviewUseCase
 import com.m.twitchwatchdog.dashboard.useCase.IsSyncJobRunningUseCase
 import com.m.twitchwatchdog.dashboard.useCase.UpdateChannelUseCase
 import com.m.twitchwatchdog.infrastructure.useCase.FetchChannelInfoUseCase
@@ -31,6 +32,7 @@ internal class DashboardViewModelImpl @Inject constructor(
     private val deleteChannelUseCase: DeleteChannelUseCase,
     private val updateChannelUseCase: UpdateChannelUseCase,
     private val isSyncJobRunningUseCase: IsSyncJobRunningUseCase,
+    private val getChannelPreviewUseCase: GetChannelPreviewUseCase,
 ) : DashboardViewModel, ViewModel() {
 
     override val state = MutableStateFlow(DashboardScreenState())
@@ -82,6 +84,7 @@ internal class DashboardViewModelImpl @Inject constructor(
             }.onFailure {
                 println("Failed to add channel: $it")
             }
+            state.update { it.copy(channelPreview = null) }
         }
     }
 
@@ -108,6 +111,23 @@ internal class DashboardViewModelImpl @Inject constructor(
             } finally {
                 state.update { it.copy(refreshing = false) }
             }
+        }
+    }
+
+    override fun onRequestPreview(channelName: String) {
+        viewModelScope.launch {
+            runCatching {
+                val channelInfo = if(channelName.isNotBlank()) {
+                    getChannelPreviewUseCase.execute(channelName)
+                } else {
+                    null
+                }
+
+                state.update { it.copy(channelPreview = channelInfo) }
+            }.onFailure {
+                    println("Failed to fetch channel preview.")
+                    state.update { it.copy(channelPreview = null) }
+                }
         }
     }
 }
