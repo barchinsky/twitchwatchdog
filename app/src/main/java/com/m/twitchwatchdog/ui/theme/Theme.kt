@@ -38,9 +38,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun TwitchWatchdogTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
         darkTheme -> DarkColorScheme
@@ -50,6 +48,6 @@ fun TwitchWatchdogTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }

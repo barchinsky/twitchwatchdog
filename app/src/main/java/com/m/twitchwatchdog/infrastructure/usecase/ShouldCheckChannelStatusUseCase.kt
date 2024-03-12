@@ -1,6 +1,6 @@
-package com.m.twitchwatchdog.infrastructure.useCase
+package com.m.twitchwatchdog.infrastructure.usecase
 
-import com.m.twitchwatchdog.infrastructure.datasource.settings.SettingsLocalDataSource
+import com.m.twitchwatchdog.infrastructure.datasource.SettingsLocalDataSource
 import kotlinx.coroutines.flow.first
 import java.util.Calendar
 import javax.inject.Inject
@@ -14,5 +14,4 @@ internal class ShouldCheckChannelStatusUseCase @Inject constructor(
 
         return Calendar.getInstance().get(Calendar.HOUR_OF_DAY) in startHour..< endHour
     }
-
 }

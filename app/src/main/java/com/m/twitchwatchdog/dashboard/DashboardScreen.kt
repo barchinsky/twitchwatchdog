@@ -17,11 +17,11 @@ import com.m.twitchwatchdog.dashboard.ui.addChannel.AddChannelCard
 import com.m.twitchwatchdog.dashboard.ui.channelsList.ChannelsList
 import com.m.twitchwatchdog.dashboard.ui.loadingChannels.LoadingChannels
 import com.m.twitchwatchdog.dashboard.ui.noChannelsCard.NoChannelsCard
-import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings
+import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
 @Composable
-fun DashboardScreen(
+internal fun DashboardScreen(
     state: DashboardScreenState,
     appSettings: AppSettings,
     onChannelClicked: (ChannelInfo) -> Unit,
@@ -30,6 +30,7 @@ fun DashboardScreen(
     onDeleteClicked: (ChannelInfo) -> Unit,
     onNotifyRangeSettingChanged: (Int, Int) -> Unit,
     onSwipeToRefresh: () -> Unit,
+    onRequestChannelPreview: (String) -> Unit,
 ) {
 
     var isAddChannelExpanded by rememberSaveable {
@@ -63,10 +64,12 @@ fun DashboardScreen(
 
         AddChannelCard(
             expanded = isAddChannelExpanded,
+            channelPreview = state.channelPreview,
             onAddChannelClicked = { isAddChannelExpanded = true },
             onSaveChannelClicked = onSaveChannelClicked,
             onCloseClicked = { isAddChannelExpanded = false },
-            modifier = Modifier.align(Alignment.BottomEnd)
+            modifier = Modifier.align(Alignment.BottomEnd),
+            onRequestPreview = onRequestChannelPreview,
         )
     }
 }
@@ -103,7 +106,8 @@ private fun DashboardScreenPreview() {
                 onSaveChannelClicked = { _, _ -> },
                 onDeleteClicked = {},
                 onNotifyRangeSettingChanged = { _, _ -> },
-                onSwipeToRefresh = {}
+                onSwipeToRefresh = {},
+                onRequestChannelPreview = {}
             )
         }
     }

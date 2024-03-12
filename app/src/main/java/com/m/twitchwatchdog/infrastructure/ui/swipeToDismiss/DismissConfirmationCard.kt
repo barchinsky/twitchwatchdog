@@ -61,10 +61,10 @@ fun DismissConfirmationCard(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LinearProgressIndicator(
-            progress = undoCountdown,
+            progress = { undoCountdown },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 16.dp),
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Deleting $dismissTarget...")

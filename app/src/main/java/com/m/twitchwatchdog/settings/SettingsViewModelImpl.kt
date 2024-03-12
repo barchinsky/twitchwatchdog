@@ -2,7 +2,7 @@ package com.m.twitchwatchdog.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings
+import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
 import com.m.twitchwatchdog.settings.usecase.GetSettingsFlowUseCase
 import com.m.twitchwatchdog.settings.usecase.UpdateAppSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

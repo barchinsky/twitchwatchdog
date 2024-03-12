@@ -78,6 +78,7 @@ class MainActivity : ComponentActivity() {
                         onDeleteClicked = viewModel::onDeleteChannelClicked,
                         onNotifyRangeSettingChanged = settingsViewModel::onNotifyRangeChanged,
                         onSwipeToRefresh = viewModel::onSwipeToRefresh,
+                        onRequestChannelPreview = viewModel::onRequestPreview,
                     )
                 }
             }

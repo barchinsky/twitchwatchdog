@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.dashboard.useCase
+package com.m.twitchwatchdog.dashboard.usecase
 
 import android.app.job.JobInfo
 import android.app.job.JobScheduler

@@ -1,7 +1,7 @@
-package com.m.twitchwatchdog.infrastructure.useCase
+package com.m.twitchwatchdog.dashboard.usecase
 
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
-import com.m.twitchwatchdog.infrastructure.repository.ChannelInfoRepository
+import com.m.twitchwatchdog.dashboard.repository.ChannelInfoRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

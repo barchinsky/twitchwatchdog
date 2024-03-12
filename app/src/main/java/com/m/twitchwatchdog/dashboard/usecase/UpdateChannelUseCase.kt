@@ -1,10 +1,10 @@
-package com.m.twitchwatchdog.dashboard.useCase
+package com.m.twitchwatchdog.dashboard.usecase
 
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
-import com.m.twitchwatchdog.infrastructure.repository.ChannelInfoRepository
+import com.m.twitchwatchdog.dashboard.repository.ChannelInfoRepository
 import javax.inject.Inject
 
-class UpdateChannelUseCase @Inject constructor(
+internal class UpdateChannelUseCase @Inject constructor(
     private val channelInfoRepository: ChannelInfoRepository,
 ) {
 

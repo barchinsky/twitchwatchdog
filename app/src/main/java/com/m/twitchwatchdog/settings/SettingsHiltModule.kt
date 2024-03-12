@@ -3,11 +3,8 @@ package com.m.twitchwatchdog.settings
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
-import com.m.twitchwatchdog.infrastructure.datasource.settings.SettingsDataStoreDataSource
-import com.m.twitchwatchdog.infrastructure.datasource.settings.SettingsLocalDataSource
-import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings
-import com.m.twitchwatchdog.infrastructure.datasource.settings.model.SettingsSerializer
-import dagger.Binds
+import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
+import com.m.twitchwatchdog.infrastructure.datasource.model.SettingsSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

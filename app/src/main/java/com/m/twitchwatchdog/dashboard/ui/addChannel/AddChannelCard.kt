@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkHorizontally
@@ -25,6 +26,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -41,13 +43,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.m.twitchwatchdog.dashboard.model.ChannelInfo
+import com.m.twitchwatchdog.dashboard.ui.channelCard.ChannelCard
 import com.m.twitchwatchdog.infrastructure.ui.switchRow.SwitchRow
 import com.m.twitchwatchdog.ui.theme.DarkGreyAlpha80
 import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
@@ -55,6 +57,9 @@ import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
 
 private val expandedModifier = Modifier.fillMaxSize()
+private val PreviewCountdownDelay = TimeUnit.MILLISECONDS.toMillis(1000)
+private val PreviewCountdownDuration = TimeUnit.SECONDS.toMillis(2).toInt()
+private val PreviewCountdownResetDuration = TimeUnit.MILLISECONDS.toMillis(300).toInt()
 
 @Composable
 fun AddChannelCard(
@@ -63,9 +68,10 @@ fun AddChannelCard(
     onSaveChannelClicked: (String, Boolean) -> Unit,
     onCloseClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    channelPreview: ChannelInfo? = null,
+    onRequestPreview: (String) -> Unit = {},
 ) {
     val defaultBackgroundColor = Color.Transparent
-    val focusRequester = remember { FocusRequester() }
     val softKeyboardController = LocalSoftwareKeyboardController.current
 
     var channelName by rememberSaveable { mutableStateOf("") }
@@ -84,11 +90,30 @@ fun AddChannelCard(
 
     val animatedAddButtonAlignment by animateHorizontalAlignmentAsState(expanded)
 
-    LaunchedEffect(expanded) {
-        if (expanded) {
-            delay(TimeUnit.SECONDS.toMillis(1))
-            focusRequester.requestFocus()
+    var shouldStartPreviewCountdown by remember {
+        mutableStateOf(false)
+    }
+    val previewFetchCountdown by animateFloatAsState(
+        targetValue = 0f.takeIf { shouldStartPreviewCountdown } ?: 1f,
+        animationSpec = tween(PreviewCountdownDuration.takeIf { shouldStartPreviewCountdown }
+                                  ?: PreviewCountdownResetDuration),
+        label = "Fetch preview timeout",
+        finishedListener = { finalValue ->
+            if (finalValue == 0f) {
+                onRequestPreview.invoke(channelName)
+            }
+            shouldStartPreviewCountdown = false
         }
+    )
+
+    LaunchedEffect(channelName) {
+        shouldStartPreviewCountdown = false
+        if (channelName.isEmpty()) {
+            onRequestPreview(channelName)
+        }
+
+        delay(PreviewCountdownDelay)
+        shouldStartPreviewCountdown = channelName.isNotBlank()
     }
 
     val initModifier = expandedModifier.takeIf { expanded } ?: Modifier
@@ -125,19 +150,22 @@ fun AddChannelCard(
                             .align(Alignment.End)
                             .clickable {
                                 channelName = ""
-                                focusRequester.freeFocus()
                                 softKeyboardController?.hide()
                                 onCloseClicked()
                             }
                     )
+                    AnimatedVisibility(visible = channelPreview != null && channelName.isNotBlank()) {
+                        channelPreview?.let {
+                            ChannelCard(channelInfo = it, onChannelClicked = {})
+                        }
+                    }
                     OutlinedTextField(
                         value = channelName,
                         onValueChange = { channelName = it },
-                        label = { Text("Twitch channel") },
+                        label = { Text("Channel name") },
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 onSaveChannelClicked(channelName, shouldNotify)
-                                focusRequester.freeFocus()
                                 channelName = ""
                             }
                         ),
@@ -145,8 +173,15 @@ fun AddChannelCard(
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .focusRequester(focusRequester),
                     )
+                    AnimatedVisibility(visible = shouldStartPreviewCountdown) {
+                        LinearProgressIndicator(
+                            progress = { previewFetchCountdown },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp),
+                        )
+                    }
                     Spacer(modifier = Modifier.heightIn(8.dp))
                     SwitchRow(
                         title = "Notify when live",
@@ -162,7 +197,6 @@ fun AddChannelCard(
                 onAddChannelClick = onAddChannelClicked,
                 onSaveChannelClick = {
                     onSaveChannelClicked(channelName, shouldNotify)
-                    focusRequester.freeFocus()
                     channelName = ""
                 },
                 modifier = Modifier
@@ -211,6 +245,25 @@ fun AddChannelCardExpandedPreview() {
             Box(modifier = Modifier.fillMaxSize()) {
                 AddChannelCard(
                     expanded = true,
+                    onAddChannelClicked = {},
+                    onSaveChannelClicked = { _, _ -> },
+                    onCloseClicked = {},
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+@PreviewLightDark
+fun AddChannelCardChannelInfoPreview() {
+    TwitchWatchdogTheme {
+        Surface {
+            Box(modifier = Modifier.fillMaxSize()) {
+                AddChannelCard(
+                    expanded = true,
+                    channelPreview = ChannelInfo.getDefault(1, "Channel1", false),
                     onAddChannelClicked = {},
                     onSaveChannelClicked = { _, _ -> },
                     onCloseClicked = {},

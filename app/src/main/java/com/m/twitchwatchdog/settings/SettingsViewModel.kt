@@ -1,6 +1,6 @@
 package com.m.twitchwatchdog.settings
 
-import com.m.twitchwatchdog.infrastructure.datasource.settings.model.AppSettings
+import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
 import kotlinx.coroutines.flow.StateFlow
 
 interface SettingsViewModel {
