@@ -14,7 +14,7 @@ import java.io.File
 
 @Module
 @InstallIn(SingletonComponent::class)
-object SettingsHiltModuleProvider {
+internal object SettingsHiltModuleProvider {
 
     @Provides
     fun providesDataStore(

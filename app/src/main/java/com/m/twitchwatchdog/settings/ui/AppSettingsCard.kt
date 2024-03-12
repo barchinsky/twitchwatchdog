@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
-import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
+import com.m.shared.ui.theme.TwitchWatchdogTheme
 
 @Composable
 fun AppSettingsCard(
@@ -67,7 +67,7 @@ fun AppSettingsCard(
 @PreviewLightDark
 @Composable
 fun AppSettingsCardPreview() {
-    TwitchWatchdogTheme {
+    com.m.shared.ui.theme.TwitchWatchdogTheme {
         Surface {
             AppSettingsCard(
                 appSettings = AppSettings.getDefault(),

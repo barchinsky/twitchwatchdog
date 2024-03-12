@@ -32,7 +32,7 @@ import coil.request.ImageRequest
 import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.ui.liveChannelBadge.ChannelStatusBadge
-import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
+import com.m.shared.ui.theme.TwitchWatchdogTheme
 
 @Composable
 fun ChannelCard(
@@ -94,7 +94,7 @@ fun ChannelCard(
 @Composable
 @PreviewLightDark
 fun ChannelCardPreview() {
-    TwitchWatchdogTheme {
+    com.m.shared.ui.theme.TwitchWatchdogTheme {
         Surface {
             ChannelCard(
                 channelInfo = ChannelInfo(

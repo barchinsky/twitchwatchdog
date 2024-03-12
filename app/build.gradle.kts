@@ -57,9 +57,9 @@ android {
 
 dependencies {
     val composeBomVersion = "2024.02.02"
+    implementation(project(":shared"))
 
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
 
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:$composeBomVersion"))
@@ -70,6 +70,7 @@ dependencies {
 
     implementation("org.jsoup:jsoup:1.17.2")
 
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
@@ -83,16 +84,13 @@ dependencies {
 
     // Moshi
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:6.3.0")
 
     // DataStore
     implementation("androidx.datastore:datastore:1.0.0")
-
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
@@ -102,5 +100,4 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation(platform("androidx.compose:compose-bom:$composeBomVersion"))
-
 }

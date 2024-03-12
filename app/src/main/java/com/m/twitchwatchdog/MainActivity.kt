@@ -35,7 +35,7 @@ import com.m.twitchwatchdog.dashboard.DashboardViewModel
 import com.m.twitchwatchdog.dashboard.DashboardViewModelImpl
 import com.m.twitchwatchdog.settings.SettingsViewModel
 import com.m.twitchwatchdog.settings.SettingsViewModelImpl
-import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
+import com.m.shared.ui.theme.TwitchWatchdogTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -122,6 +122,6 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    TwitchWatchdogTheme {
+    com.m.shared.ui.theme.TwitchWatchdogTheme {
     }
 }

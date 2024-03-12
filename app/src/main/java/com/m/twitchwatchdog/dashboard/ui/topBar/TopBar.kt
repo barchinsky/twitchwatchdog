@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
 import com.m.twitchwatchdog.settings.ui.AppSettingsCard
-import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
+import com.m.shared.ui.theme.TwitchWatchdogTheme
 
 @Composable
 fun TopBar(
@@ -119,7 +119,7 @@ fun TopBar(
 @PreviewLightDark
 @Composable
 fun TopBarPreview() {
-    TwitchWatchdogTheme {
+    com.m.shared.ui.theme.TwitchWatchdogTheme {
         Surface {
             TopBar(
                 notificationsEnabled = true,

@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
-import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
+import com.m.shared.ui.theme.TwitchWatchdogTheme
 
 @Composable
 fun ChannelStatusBadge(
@@ -52,7 +52,7 @@ fun ChannelStatusBadge(
 @Composable
 @PreviewLightDark
 fun LiveChannelBadgePreview() {
-    TwitchWatchdogTheme {
+    com.m.shared.ui.theme.TwitchWatchdogTheme {
         ChannelStatusBadge(
             channel = ChannelInfo.getDefault(1, "", false),
             modifier = Modifier.width(200.dp)

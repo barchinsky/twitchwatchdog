@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.ui.theme
+package com.m.shared.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
