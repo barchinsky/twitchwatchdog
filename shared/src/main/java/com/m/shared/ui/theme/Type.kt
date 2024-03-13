@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.ui.theme
+package com.m.shared.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

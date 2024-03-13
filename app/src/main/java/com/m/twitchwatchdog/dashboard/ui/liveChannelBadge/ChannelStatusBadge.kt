@@ -17,9 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.m.shared.ui.theme.TwitchWatchdogTheme
 import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
-import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 
 @Composable
 fun ChannelStatusBadge(

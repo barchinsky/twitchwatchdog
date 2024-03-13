@@ -48,11 +48,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.m.shared.ui.switchRow.SwitchRow
+import com.m.shared.ui.theme.DarkGreyAlpha80
+import com.m.shared.ui.theme.TwitchWatchdogTheme
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.ui.channelCard.ChannelCard
-import com.m.twitchwatchdog.infrastructure.ui.switchRow.SwitchRow
-import com.m.twitchwatchdog.ui.theme.DarkGreyAlpha80
-import com.m.twitchwatchdog.ui.theme.TwitchWatchdogTheme
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
 

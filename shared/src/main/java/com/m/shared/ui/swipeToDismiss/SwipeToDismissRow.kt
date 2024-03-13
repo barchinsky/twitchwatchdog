@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.infrastructure.ui.swipeToDismiss
+package com.m.shared.ui.swipeToDismiss
 
 import android.content.Context
 import android.os.VibrationEffect

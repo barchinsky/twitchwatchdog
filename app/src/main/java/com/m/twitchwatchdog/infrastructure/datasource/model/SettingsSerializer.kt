@@ -2,15 +2,16 @@ package com.m.twitchwatchdog.infrastructure.datasource.model
 
 import androidx.datastore.core.Serializer
 import com.squareup.moshi.Moshi
-
+import com.squareup.moshi.adapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
-import com.squareup.moshi.adapter
 
 @Singleton
-class SettingsSerializer @Inject constructor(
+internal class SettingsSerializer @Inject constructor(
     moshi: Moshi,
 ) : Serializer<AppSettings> {
 
@@ -27,6 +28,8 @@ class SettingsSerializer @Inject constructor(
         }
 
     override suspend fun writeTo(t: AppSettings, output: OutputStream) {
-        output.write(settingsAdapter.toJson(t).encodeToByteArray())
+        withContext(Dispatchers.IO) {
+            output.write(settingsAdapter.toJson(t).encodeToByteArray())
+        }
     }
 }
