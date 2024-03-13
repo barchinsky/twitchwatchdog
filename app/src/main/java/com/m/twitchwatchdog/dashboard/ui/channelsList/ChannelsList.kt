@@ -23,11 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import com.m.shared.ui.swipeToDismiss.SwipeToDismissRow
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.ui.expandableChannelCard.ExpandableChannelCard
 import com.m.twitchwatchdog.dashboard.ui.topBar.TopBar
 import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
-import com.m.shared.ui.swipeToDismiss.SwipeToDismissRow
 
 private val ListFABInsets = 50.dp
 
@@ -83,7 +83,7 @@ fun ChannelsList(
                     count = channels.size,
                     key = { index -> channels[index].id }
                 ) {
-                    com.m.shared.ui.swipeToDismiss.SwipeToDismissRow(
+                    SwipeToDismissRow(
                         item = channels[it],
                         dismissTarget = channels[it].name,
                         onDismissed = onDeleteClicked,

@@ -25,8 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.m.twitchwatchdog.R
 import com.m.shared.ui.theme.TwitchWatchdogTheme
+import com.m.twitchwatchdog.R
 
 @Composable
 fun AddChannelButton(
@@ -81,7 +81,7 @@ fun AddChannelButton(
 @Composable
 @PreviewLightDark
 private fun AddChannelButtonPreview() {
-    com.m.shared.ui.theme.TwitchWatchdogTheme {
+    TwitchWatchdogTheme {
         AddChannelButton(
             expanded = false,
             enabled = true,

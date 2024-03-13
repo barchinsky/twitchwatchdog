@@ -15,8 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.shared.ui.theme.TwitchWatchdogTheme
+import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 
 @Composable
 fun ChannelInfoCard(
@@ -63,7 +63,7 @@ fun ChannelInfoCard(
 @PreviewLightDark
 @Composable
 fun ChannelInfoPreview() {
-    com.m.shared.ui.theme.TwitchWatchdogTheme {
+    TwitchWatchdogTheme {
         ChannelInfoCard(
             channelInfo = ChannelInfo.getDefault(
                 1,

@@ -119,7 +119,7 @@ fun TopBar(
 @PreviewLightDark
 @Composable
 fun TopBarPreview() {
-    com.m.shared.ui.theme.TwitchWatchdogTheme {
+    TwitchWatchdogTheme {
         Surface {
             TopBar(
                 notificationsEnabled = true,

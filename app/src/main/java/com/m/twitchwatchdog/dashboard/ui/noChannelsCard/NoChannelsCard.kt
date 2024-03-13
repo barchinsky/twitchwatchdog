@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.m.twitchwatchdog.R
 import com.m.shared.ui.theme.TwitchWatchdogTheme
+import com.m.twitchwatchdog.R
 
 @Composable
 fun NoChannelsCard(
@@ -45,7 +45,7 @@ fun NoChannelsCard(
 @Preview
 @Composable
 fun NoChannelsCardPreview() {
-    com.m.shared.ui.theme.TwitchWatchdogTheme {
+    TwitchWatchdogTheme {
         Surface {
             NoChannelsCard()
         }

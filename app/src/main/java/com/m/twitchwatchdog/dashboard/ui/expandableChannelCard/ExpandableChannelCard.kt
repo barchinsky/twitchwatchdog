@@ -8,14 +8,12 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.m.shared.ui.theme.TwitchWatchdogTheme
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.ui.channelCard.ChannelCard
 import com.m.twitchwatchdog.dashboard.ui.channelInfo.ChannelInfoCard
-import com.m.shared.ui.theme.TwitchWatchdogTheme
 
 @Composable
 fun ExpandableChannelCard(
@@ -46,7 +44,7 @@ fun ExpandableChannelCard(
 @PreviewLightDark
 @Composable
 private fun ExpandableChannelCardPreview() {
-    com.m.shared.ui.theme.TwitchWatchdogTheme {
+    TwitchWatchdogTheme {
         Surface {
             ExpandableChannelCard(
                 channelInfo = ChannelInfo.getDefault(1, "Channel1", false),

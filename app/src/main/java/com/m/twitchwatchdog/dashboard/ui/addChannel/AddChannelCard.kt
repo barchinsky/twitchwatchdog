@@ -48,11 +48,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.m.twitchwatchdog.dashboard.model.ChannelInfo
-import com.m.twitchwatchdog.dashboard.ui.channelCard.ChannelCard
 import com.m.shared.ui.switchRow.SwitchRow
 import com.m.shared.ui.theme.DarkGreyAlpha80
 import com.m.shared.ui.theme.TwitchWatchdogTheme
+import com.m.twitchwatchdog.dashboard.model.ChannelInfo
+import com.m.twitchwatchdog.dashboard.ui.channelCard.ChannelCard
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
 
@@ -79,7 +79,7 @@ fun AddChannelCard(
     val isSaveEnabled by remember { derivedStateOf { channelName.isNotBlank() } }
 
     val animatedBackgroundColor by animateColorAsState(
-        targetValue = com.m.shared.ui.theme.DarkGreyAlpha80.takeIf { expanded }
+        targetValue = DarkGreyAlpha80.takeIf { expanded }
             ?: defaultBackgroundColor,
         label = "Background color"
     )
@@ -183,7 +183,7 @@ fun AddChannelCard(
                         )
                     }
                     Spacer(modifier = Modifier.heightIn(8.dp))
-                    com.m.shared.ui.switchRow.SwitchRow(
+                    SwitchRow(
                         title = "Notify when live",
                         checked = shouldNotify,
                         onCheckedChanged = { shouldNotify = !shouldNotify },
@@ -222,7 +222,7 @@ private fun animateHorizontalAlignmentAsState(
 @Composable
 @PreviewLightDark
 fun AddChannelCardPreview() {
-    com.m.shared.ui.theme.TwitchWatchdogTheme {
+    TwitchWatchdogTheme {
         Surface {
             Box(modifier = Modifier.fillMaxSize()) {
                 AddChannelCard(
@@ -240,7 +240,7 @@ fun AddChannelCardPreview() {
 @Composable
 @PreviewLightDark
 fun AddChannelCardExpandedPreview() {
-    com.m.shared.ui.theme.TwitchWatchdogTheme {
+    TwitchWatchdogTheme {
         Surface {
             Box(modifier = Modifier.fillMaxSize()) {
                 AddChannelCard(
@@ -258,7 +258,7 @@ fun AddChannelCardExpandedPreview() {
 @Composable
 @PreviewLightDark
 fun AddChannelCardChannelInfoPreview() {
-    com.m.shared.ui.theme.TwitchWatchdogTheme {
+    TwitchWatchdogTheme {
         Surface {
             Box(modifier = Modifier.fillMaxSize()) {
                 AddChannelCard(

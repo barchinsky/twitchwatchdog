@@ -29,10 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.m.shared.ui.theme.TwitchWatchdogTheme
 import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.ui.liveChannelBadge.ChannelStatusBadge
-import com.m.shared.ui.theme.TwitchWatchdogTheme
 
 @Composable
 fun ChannelCard(
@@ -94,7 +94,7 @@ fun ChannelCard(
 @Composable
 @PreviewLightDark
 fun ChannelCardPreview() {
-    com.m.shared.ui.theme.TwitchWatchdogTheme {
+    TwitchWatchdogTheme {
         Surface {
             ChannelCard(
                 channelInfo = ChannelInfo(
