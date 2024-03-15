@@ -1,0 +1,65 @@
+[versions]
+androidGradlePlugin = "8.3.0"
+
+# Android sdk config
+targetSdk = "34"
+minSdk = "28"
+compileSdk = "34"
+
+# Dependencies
+appcompat = "1.6.1"
+activityCompose = "1.8.2"
+coilCompose = "2.5.0"
+composeBom = "2024.02.02"
+coreKtx = "1.12.0"
+datastore = "1.0.0"
+hiltAndroid = "2.48"
+jsoup = "1.17.2"
+kotlinAndroid = "1.9.22"
+kotlinxCoroutinesCore = "1.8.0"
+ksp = "1.9.22-1.0.17"
+lifecycleRuntimeKtx = "2.7.0"
+lottieCompose = "6.3.0"
+
+# Tests
+espressoCore = "3.5.1"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+mockk = "1.13.10"
+moshiKotlin = "1.15.0"
+moshiKotlinCodegen = "1.15.1"
+truth = "1.4.2"
+
+[libraries]
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose"}
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
+junit = { module = "junit:junit", version.ref = "junit" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesCore" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshiKotlin" }
+moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshiKotlinCodegen" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom"}
+
+# Dependencies of the included build-logic
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlinAndroid" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAndroid" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

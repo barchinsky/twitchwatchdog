@@ -9,21 +9,21 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 /**
  * Configure base Kotlin with Android options
  */
+private val JVM_VERSION = JavaVersion.VERSION_1_8
+
 internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) {
     commonExtension.apply {
-        compileSdk = 34
+        compileSdk = findVersion("compileSdk").toInt()
 
         defaultConfig {
-            minSdk = 28
+            minSdk = findVersion("minSdk").toInt()
         }
 
         compileOptions {
-            // Up to Java 11 APIs are available through desugaring
-            // https://developer.android.com/studio/write/java11-minimal-support-table
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
+            sourceCompatibility = JVM_VERSION
+            targetCompatibility = JVM_VERSION
         }
     }
 
@@ -37,8 +37,7 @@ private fun Project.configureKotlin() {
     // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
-            // Set JVM target to 11
-            jvmTarget = JavaVersion.VERSION_1_8.toString()
+            jvmTarget = JVM_VERSION.toString()
         }
     }
 }
