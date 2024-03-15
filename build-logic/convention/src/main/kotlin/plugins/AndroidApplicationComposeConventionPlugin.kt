@@ -3,12 +3,14 @@ package plugins
 import com.android.build.api.dsl.ApplicationExtension
 import extensions.configureAndroidCompose
 import extensions.configureKotlinAndroid
+import extensions.findVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.internal.impldep.com.jcraft.jsch.ConfigRepository.defaultConfig
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.getByType
 
 class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
+
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply("com.android.application")
@@ -19,9 +21,9 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
             configureKotlinAndroid(extension)
 
             extension.apply {
-                defaultConfig.targetSdk = 34
-                defaultConfig.minSdk = 28
-                compileSdk = 34
+                defaultConfig.targetSdk = findVersion("targetSdk").toInt()
+                defaultConfig.minSdk = findVersion("minSdk").toInt()
+                compileSdk = findVersion("compileSdk").toInt()
             }
         }
     }

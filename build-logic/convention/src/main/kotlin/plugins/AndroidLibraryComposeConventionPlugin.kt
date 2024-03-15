@@ -3,6 +3,7 @@ package plugins
 import com.android.build.api.dsl.LibraryExtension
 import extensions.configureAndroidCompose
 import extensions.configureKotlinAndroid
+import extensions.findVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
@@ -18,7 +19,7 @@ class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
             configureAndroidCompose(extension)
             configureKotlinAndroid(extension)
 
-            extension.defaultConfig.minSdk = 28
+            extension.defaultConfig.minSdk = findVersion("minSdk").toInt()
         }
     }
 }

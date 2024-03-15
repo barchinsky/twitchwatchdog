@@ -5,8 +5,8 @@ plugins {
 group = "com.m.twitchwatchdog.buildlogic"
 
 dependencies {
-    compileOnly("com.android.tools.build:gradle:8.3.0")
-    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
+    compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.kotlin.gradlePlugin)
 }
 
 gradlePlugin {
