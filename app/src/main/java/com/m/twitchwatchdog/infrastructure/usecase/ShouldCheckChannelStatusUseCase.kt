@@ -1,6 +1,6 @@
 package com.m.twitchwatchdog.infrastructure.usecase
 
-import com.m.twitchwatchdog.infrastructure.datasource.SettingsLocalDataSource
+import com.m.twitchwatchdog.settings.datasource.SettingsLocalDataSource
 import kotlinx.coroutines.flow.first
 import java.util.Calendar
 import javax.inject.Inject

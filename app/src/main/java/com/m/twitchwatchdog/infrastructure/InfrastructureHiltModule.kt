@@ -1,7 +1,5 @@
 package com.m.twitchwatchdog.infrastructure
 
-import com.m.twitchwatchdog.infrastructure.datasource.SettingsDataStoreDataSource
-import com.m.twitchwatchdog.infrastructure.datasource.SettingsLocalDataSource
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Binds

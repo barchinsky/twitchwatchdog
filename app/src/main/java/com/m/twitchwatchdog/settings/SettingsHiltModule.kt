@@ -3,8 +3,11 @@ package com.m.twitchwatchdog.settings
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
-import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
-import com.m.twitchwatchdog.infrastructure.datasource.model.SettingsSerializer
+import com.m.twitchwatchdog.settings.datasource.SettingsDataStoreDataSource
+import com.m.twitchwatchdog.settings.datasource.SettingsLocalDataSource
+import com.m.twitchwatchdog.settings.datasource.model.AppSettings
+import com.m.twitchwatchdog.settings.datasource.model.SettingsSerializer
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +20,7 @@ import java.io.File
 internal object SettingsHiltModuleProvider {
 
     @Provides
-    fun providesDataStore(
+    fun providesAppSettingsDataStore(
         @ApplicationContext context: Context,
         serializer: SettingsSerializer,
     ): DataStore<AppSettings> =
@@ -25,4 +28,12 @@ internal object SettingsHiltModuleProvider {
             serializer = serializer,
             produceFile = { File("${context.cacheDir.path}/app_preferences.pb") }
         )
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class InfrastructureHiltModuleBinder {
+
+    @Binds
+    abstract fun bindsSettingsLocalDataSource(dataSourceImpl: SettingsDataStoreDataSource): SettingsLocalDataSource
 }

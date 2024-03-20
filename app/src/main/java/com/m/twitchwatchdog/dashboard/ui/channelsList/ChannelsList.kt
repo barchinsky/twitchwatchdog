@@ -27,7 +27,7 @@ import com.m.shared.ui.swipeToDismiss.SwipeToDismissRow
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.ui.expandableChannelCard.ExpandableChannelCard
 import com.m.twitchwatchdog.dashboard.ui.topBar.TopBar
-import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
+import com.m.twitchwatchdog.settings.datasource.model.AppSettings
 
 private val ListFABInsets = 50.dp
 
