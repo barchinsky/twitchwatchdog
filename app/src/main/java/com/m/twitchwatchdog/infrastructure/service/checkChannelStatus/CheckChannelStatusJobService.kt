@@ -13,12 +13,15 @@ import com.m.twitchwatchdog.R
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 import com.m.twitchwatchdog.dashboard.usecase.FetchChannelInfoUseCase
 import com.m.twitchwatchdog.dashboard.usecase.GetChannelsFlowUseCase
+import com.m.twitchwatchdog.infrastructure.usecase.GetNotificationCompliantChannelsUseCase
 import com.m.twitchwatchdog.infrastructure.usecase.ShouldCheckChannelStatusUseCase
+import com.m.twitchwatchdog.infrastructure.usecase.AddChannelsToNotificationRecordUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -40,33 +43,36 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
     @Inject
     lateinit var shouldCheckChannelStatusUseCase: ShouldCheckChannelStatusUseCase
 
+    @Inject
+    lateinit var addChannelsToNotificationRecordUseCase: AddChannelsToNotificationRecordUseCase
+
+    @Inject
+    lateinit var getNotificationCompliantChannelsUseCase: GetNotificationCompliantChannelsUseCase
+
+    private val notificationManager
+        get() = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun onStartJob(params: JobParameters?): Boolean {
         coroutineScope.launch {
-            println("Fetching channel info...")
+            println("AAA: Fetching channel info...")
             if (shouldCheckChannelStatusUseCase.execute()) {
-                runCatching { fetchChannelInfoUseCase.execute() }
-                    .onFailure { println("Failed to complete fetching job!. $it") }
+                runCatching {
+                    fetchChannelInfoUseCase.execute()
 
-                getChannelsFlowUseCase.execute()
-                    .onEach { channelInfo ->
-                        val liveChannels =
-                            channelInfo.filter { it.notifyWhenLive && it.status == ChannelInfo.Status.LIVE }
+                    val channels = getChannelsFlowUseCase.execute()
+                        .firstOrNull()
+                        .orEmpty()
 
-                        if (liveChannels.isNotEmpty()) {
-                            val liveChannelNames = liveChannels.joinToString(",") { it.name }
-                            showNotificationIfNeeded(
-                                context.getString(
-                                    R.string.channels_online,
-                                    liveChannelNames
-                                )
-                            )
-                        }
-
-                        jobFinished(params, false)
+                    if (channels.isNotEmpty()) {
+                        showNotificationIfNeeded(channels)
+                    } else {
+                        addChannelsToNotificationRecordUseCase.execute(emptyList())
                     }
-                    .launchIn(coroutineScope)
+                }.onFailure { println("Failed to complete fetching job!. $it") }
+
+                jobFinished(params, false)
             } else {
                 jobFinished(params, false)
             }
@@ -80,12 +86,21 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
         return false
     }
 
-    private fun showNotificationIfNeeded(content: String) {
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private suspend fun showNotificationIfNeeded(liveChannels: List<ChannelInfo>) {
+        val notificationCompliantChannels =
+            getNotificationCompliantChannelsUseCase.execute(liveChannels)
+
+        if (notificationCompliantChannels.isEmpty()) return
+
+        val liveChannelNames = notificationCompliantChannels.joinToString(",") { it.name }
+        val content = context.getString(
+            R.string.channels_online,
+            liveChannelNames
+        )
+        val notificationId = liveChannelNames.hashCode()
 
         // Don't notify if previous notification is not cancelled
-        if (notificationManager.activeNotifications.any { it.id == content.hashCode() }) {
+        if (notificationManager.activeNotifications.any { it.id == notificationId }) {
             return
         }
 
@@ -104,7 +119,8 @@ internal class CheckChannelStatusJobService @Inject constructor() : JobService()
             .setAutoCancel(true)
             .build()
 
-        notificationManager.notify(content.hashCode(), notification)
+        notificationManager.notify(notificationId, notification)
+        addChannelsToNotificationRecordUseCase.execute(notificationCompliantChannels.map { it.name })
     }
 
     private fun getContentIntent(): PendingIntent {

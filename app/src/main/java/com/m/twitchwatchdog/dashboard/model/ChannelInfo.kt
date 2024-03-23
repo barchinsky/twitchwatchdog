@@ -21,7 +21,7 @@ data class ChannelInfo(
 
     companion object {
 
-        fun getDefault(id: Long, name: String, notifyWhenLive: Boolean): ChannelInfo =
+        fun getDefault(id: Long, name: String, notifyWhenLive: Boolean = false): ChannelInfo =
             ChannelInfo(
                 id = id,
                 name = name,
