@@ -8,11 +8,11 @@ import com.m.twitchwatchdog.dashboard.usecase.AddChannelUseCase
 import com.m.twitchwatchdog.dashboard.usecase.DeleteChannelUseCase
 import com.m.twitchwatchdog.dashboard.usecase.DisableChannelAlertUseCase
 import com.m.twitchwatchdog.dashboard.usecase.EnableChannelAlertUseCase
+import com.m.twitchwatchdog.dashboard.usecase.FetchChannelInfoUseCase
 import com.m.twitchwatchdog.dashboard.usecase.GetChannelPreviewUseCase
+import com.m.twitchwatchdog.dashboard.usecase.GetChannelsFlowUseCase
 import com.m.twitchwatchdog.dashboard.usecase.IsSyncJobRunningUseCase
 import com.m.twitchwatchdog.dashboard.usecase.UpdateChannelUseCase
-import com.m.twitchwatchdog.dashboard.usecase.FetchChannelInfoUseCase
-import com.m.twitchwatchdog.dashboard.usecase.GetChannelsFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -51,14 +51,12 @@ internal class DashboardViewModelImpl @Inject constructor(
 
         getChannelsFlowUseCase.execute()
             .onEach { channels ->
-                if (channels.any { it.notifyWhenLive }) {
-                    enableChannelAlertUseCase.execute()
-                } else {
-                    disableChannelAlertUseCase.execute()
-                }
+                val isSyncJobRunning = isSyncJobRunningUseCase.execute()
+                state.update { it.copy(channels = channels, syncJobRunning = isSyncJobRunning) }
 
-                state.update {
-                    it.copy(channels = channels, syncJobRunning = isSyncJobRunningUseCase.execute())
+                if (channels.isEmpty() || channels.all { !it.notifyWhenLive }) {
+                    disableChannelAlertUseCase.execute()
+                    state.update { it.copy(syncJobRunning = false) }
                 }
             }
             .launchIn(viewModelScope)
@@ -90,7 +88,13 @@ internal class DashboardViewModelImpl @Inject constructor(
 
     override fun onNotifyWhenLiveClicked(channelInfo: ChannelInfo) {
         viewModelScope.launch {
-            runCatching { updateChannelUseCase.execute(channelInfo.copy(notifyWhenLive = !channelInfo.notifyWhenLive)) }
+            runCatching {
+                val newChannelInfo = channelInfo.copy(notifyWhenLive = !channelInfo.notifyWhenLive)
+                updateChannelUseCase.execute(newChannelInfo)
+                if (newChannelInfo.notifyWhenLive) {
+                    enableChannelAlertUseCase.execute()
+                }
+            }
         }
     }
 
@@ -117,7 +121,7 @@ internal class DashboardViewModelImpl @Inject constructor(
     override fun onRequestPreview(channelName: String) {
         viewModelScope.launch {
             runCatching {
-                val channelInfo = if(channelName.isNotBlank()) {
+                val channelInfo = if (channelName.isNotBlank()) {
                     getChannelPreviewUseCase.execute(channelName)
                 } else {
                     null
@@ -125,9 +129,9 @@ internal class DashboardViewModelImpl @Inject constructor(
 
                 state.update { it.copy(channelPreview = channelInfo) }
             }.onFailure {
-                    println("Failed to fetch channel preview.")
-                    state.update { it.copy(channelPreview = null) }
-                }
+                println("Failed to fetch channel preview.")
+                state.update { it.copy(channelPreview = null) }
+            }
         }
     }
 }

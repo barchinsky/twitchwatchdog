@@ -1,7 +1,7 @@
-package com.m.twitchwatchdog.infrastructure.datasource
+package com.m.twitchwatchdog.settings.datasource
 
 import androidx.datastore.core.DataStore
-import com.m.twitchwatchdog.infrastructure.datasource.model.AppSettings
+import com.m.twitchwatchdog.settings.datasource.model.AppSettings
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -1,4 +1,4 @@
-package com.m.twitchwatchdog.infrastructure.datasource.model
+package com.m.twitchwatchdog.settings.datasource.model
 
 import androidx.datastore.core.Serializer
 import com.squareup.moshi.Moshi
