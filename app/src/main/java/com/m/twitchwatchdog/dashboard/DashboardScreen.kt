@@ -84,7 +84,8 @@ private fun DashboardScreenPreview() {
             status = ChannelInfo.Status.LIVE,
             avatarUrl = "https://static-cdn.jtvnw.net/jtv_user_pictures/65232217-c113-40ce-aaa9-50b06a6ee8fa-profile_image-150x150.png",
             expanded = false,
-            loading = false
+            loading = false,
+            streamName = null,
         ),
         ChannelInfo(
             id = 2,
@@ -92,7 +93,8 @@ private fun DashboardScreenPreview() {
             status = ChannelInfo.Status.OFFLINE,
             avatarUrl = "https://static-cdn.jtvnw.net/jtv_user_pictures/00563f70-d05b-4786-addd-5a3b43c2e5b4-profile_image-150x150.png",
             expanded = false,
-            loading = false
+            loading = false,
+            streamName = null,
         ),
     )
 

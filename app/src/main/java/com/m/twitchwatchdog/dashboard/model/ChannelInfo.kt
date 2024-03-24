@@ -7,17 +7,21 @@ data class ChannelInfo(
     val id: Long,
     val name: String,
     val status: Status,
+    val streamName: String?,
     val avatarUrl: String?,
     val loading: Boolean,
     val expanded: Boolean,
     val notifyWhenLive: Boolean = false,
-    val watchingNow: String = ""
+    val watchingNow: String = "",
 ) {
 
     enum class Status {
         LIVE,
         OFFLINE
     }
+
+    fun isLive(): Boolean =
+        status == Status.LIVE
 
     companion object {
 
@@ -29,7 +33,8 @@ data class ChannelInfo(
                 avatarUrl = null,
                 loading = false,
                 expanded = false,
-                notifyWhenLive = notifyWhenLive
+                notifyWhenLive = notifyWhenLive,
+                streamName = null,
             )
     }
 }

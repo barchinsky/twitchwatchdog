@@ -99,13 +99,14 @@ fun ChannelCardPreview() {
             ChannelCard(
                 channelInfo = ChannelInfo(
                     id = 1,
-                    "Channel1",
-                    ChannelInfo.Status.LIVE,
-                    "",
+                    name = "Channel1",
+                    status = ChannelInfo.Status.LIVE,
+                    streamName = null,
+                    avatarUrl = "",
                     watchingNow = "32K",
                     loading = false,
                     expanded = true,
-                    notifyWhenLive = true
+                    notifyWhenLive = true,
                 ),
                 onChannelClicked = {},
             )
