@@ -33,6 +33,7 @@ internal class ChannelInfoRepository @Inject constructor(
                             status = remoteChannel.status,
                             avatarUrl = remoteChannel.avatarUrl,
                             watchingNow = remoteChannel.watchingNow,
+                            streamName = remoteChannel.streamName,
                         )
                     }.getOrDefault(storedChannelInfo)
                 }

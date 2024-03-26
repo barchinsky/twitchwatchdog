@@ -86,14 +86,7 @@ class ChannelInfoLocalDataSource @Inject constructor(
         const val KEY_CHANNELS = "channels_key"
 
         val defaultChannels = listOf(
-            ChannelInfo(
-                id = 1,
-                name = "rocketleague",
-                status = ChannelInfo.Status.OFFLINE,
-                avatarUrl = null,
-                expanded = false,
-                loading = false
-            ),
+            ChannelInfo.getDefault(1, "rocketleague")
         )
     }
 }

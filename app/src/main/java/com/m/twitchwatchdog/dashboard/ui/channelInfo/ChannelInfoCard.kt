@@ -13,8 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.m.shared.ui.theme.TwitchWatchdogTheme
 import com.m.twitchwatchdog.dashboard.model.ChannelInfo
 
@@ -34,6 +37,16 @@ fun ChannelInfoCard(
                 .background(MaterialTheme.colorScheme.secondary)
         )
         Spacer(modifier = Modifier.height(8.dp))
+        if (channelInfo.isLive() && channelInfo.streamName?.isNotBlank() == true) {
+            Text(
+                text = channelInfo.streamName,
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2
+            )
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -69,6 +82,9 @@ fun ChannelInfoPreview() {
                 1,
                 "PGL",
                 true,
+            ).copy(
+                status = ChannelInfo.Status.LIVE,
+                streamName = "Just chatting!"
             ),
             onNotifyWhenLiveClicked = {}
         )
